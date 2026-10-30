@@ -37,7 +37,6 @@ export default function ReportarPerdidos() {
     
     return(
         <div className="reportar-perdidos">
-            <h2>Reportar objeto perdido</h2>
         <button onClick={handleChange_abrirform}>Reportar Objeto Perdido</button>
         </div>
     )
