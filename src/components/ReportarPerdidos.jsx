@@ -21,10 +21,9 @@ export default function ReportarPerdidos() {
             fecha: "",
         });
     }
-    
-    return(
-        <div className="reportar-perdidos">
-            <h2>Reportar objeto perdido</h2>
+
+    const handleChange_abrirform = (e) => {
+        return(
             <form onSubmit={handleChangeSubmit}>
                 <input type="text" name="nombre" placeholder="Nombre del objeto" value={Perdido.nombre} onChange={(e) => setPerdido({...Perdido, nombre: e.target.value})} />
                 <input type="text" name="imagen" placeholder="URL de la imagen" value={Perdido.imagen} onChange={(e) => setPerdido({...Perdido, imagen: e.target.value})} />
@@ -33,6 +32,14 @@ export default function ReportarPerdidos() {
                 <input type="date" name="fecha" placeholder="Fecha en que se perdió" value={Perdido.fecha} onChange={(e) => setPerdido({...Perdido, fecha: e.target.value})} />
                 <button type="submit">Reportar</button>
             </form>
+        )
+    }
+    
+    return(
+        <div className="reportar-perdidos">
+            <h2>Reportar objeto perdido</h2>
+        <button onClick={handleChange_abrirform}>Reportar Objeto Perdido</button>
+
         </div>
     )
 }
