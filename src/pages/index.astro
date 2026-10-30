@@ -7,15 +7,5 @@ const { data, error } = await supabase.from("todos").select("*");
 ---
 
 <Layout title="Renault Finder - Encuentra tus cosas perdidas">
-    {
-        (
-            <ul>
-                {data?.map((entry) => (
-                    <li class="font-bold">{entry.name}</li>
-                ))}
-                <Posts />
-            </ul>
-        )
-    }
-    <Hero />
+    <Hero></Hero>
 </Layout>
