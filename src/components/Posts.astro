@@ -18,7 +18,7 @@ if (error) {
             <p>Ubicación: {aviso.place}</p>
             <p>{aviso.details}</p>
             <p>{new Date(aviso.created_at).toLocaleDateString("es-AR")}</p>
-
+            <b>{aviso.type}</b>
             {aviso.imageurl && <img src={aviso.imageurl} alt={aviso.title} />}
         </article>
     ))
