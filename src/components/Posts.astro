@@ -1,0 +1,25 @@
+---
+import { supabase } from "../db/supabase";
+
+const { data: avisos, error } = await supabase
+    .from("avisos")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+if (error) {
+    console.error(error);
+}
+---
+
+{
+    avisos?.map((aviso) => (
+        <article>
+            <h2>{aviso.title}</h2>
+            <p>Ubicación: {aviso.place}</p>
+            <p>{aviso.details}</p>
+            <p>{new Date(aviso.created_at).toLocaleDateString("es-AR")}</p>
+
+            {aviso.imageurl && <img src={aviso.imageurl} alt={aviso.title} />}
+        </article>
+    ))
+}
