@@ -1,0 +1,65 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Buscar y reportar | Renault Finder">
+	<main class="design-page">
+		<section class="page-hero">
+			<div class="page-hero-copy">
+				<p class="page-kicker"><span class="size-2 rounded-full bg-[#80c4a0]"></span>Un reencuentro puede empezar aquí</p>
+				<h1>Cuéntanos qué<br /><span>estás buscando.</span></h1>
+				<p>
+					Busca entre los avisos de la comunidad o comparte los detalles de ese objeto que quieres volver a encontrar.
+				</p>
+				<label class="page-search">
+					<span class="page-search-icon" aria-hidden="true">⌕</span>
+					<span class="sr-only">Buscar un objeto</span>
+					<input type="search" placeholder="Ej. mochila, llaves, cuaderno..." />
+				</label>
+			</div>
+			<div class="page-hero-art" aria-hidden="true">
+				<div class="absolute top-3 right-[30px] size-[155px] rounded-full bg-[#e2f2e9]"></div>
+				<div class="absolute right-0 bottom-[5px] h-[130px] w-[230px] rounded-[52%_48%_42%_58%/57%_47%_53%_43%] bg-[#dceff3] -rotate-2"></div>
+				<div class="art-note">
+					<span class="art-note-icon">⌕</span>
+					Cada pista<br />puede ayudar
+				</div>
+			</div>
+		</section>
+
+		<section class="page-section" aria-labelledby="report-title">
+			<div class="page-section-heading">
+				<div>
+					<p class="page-section-kicker">¿No encuentras lo que buscas?</p>
+					<h2 id="report-title">Cuéntale a la comunidad</h2>
+					<p>Publica un aviso para que alguien pueda ayudarte a recuperar tu objeto.</p>
+				</div>
+			</div>
+
+			<div class="report-entry-card">
+				<div class="page-callout-icon" aria-hidden="true">✦</div>
+				<div>
+					<h3>Un aviso con buenos detalles hace la diferencia</h3>
+					<p>Agrega una descripción, el lugar donde lo perdiste y cualquier detalle que ayude a reconocerlo.</p>
+				</div>
+				<button class="page-button" type="button" data-open-report-dialog>
+					＋ Reportar objeto perdido
+				</button>
+			</div>
+		</section>
+
+		<aside class="page-callout">
+			<div class="page-callout-icon" aria-hidden="true">♡</div>
+			<div>
+				<h2>¿Encontraste algo que alguien perdió?</h2>
+				<p>También puedes compartirlo para ayudar a que vuelva a casa.</p>
+			</div>
+			<a href="/encontrados">Ver objetos encontrados <span aria-hidden="true">→</span></a>
+		</aside>
+
+		<footer class="page-footer">
+			<span>Hecho con <span class="page-footer-heart" aria-label="cariño">♥</span> para nuestra comunidad</span>
+			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
+		</footer>
+	</main>
+</Layout>

@@ -1,0 +1,104 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Objetos encontrados | Renault Finder">
+	<main class="design-page">
+		<section class="page-hero">
+			<div class="page-hero-copy">
+				<p class="page-kicker"><span class="size-2 rounded-full bg-[#80c4a0]"></span>Un gesto puede cambiar el día</p>
+				<h1>¿Encontraste algo?<br /><span>Hagamos que vuelva.</span></h1>
+				<p>
+					Publica los detalles del objeto para que su dueño pueda reconocerlo. La comunidad te ayuda con el reencuentro.
+				</p>
+				<a class="page-button" href="/busqueda">＋ Compartir un objeto encontrado</a>
+			</div>
+			<div class="page-hero-art" aria-hidden="true">
+				<div class="absolute top-3 right-[30px] size-[155px] rounded-full bg-[#e2f2e9]"></div>
+				<div class="absolute right-0 bottom-[5px] h-[130px] w-[230px] rounded-[52%_48%_42%_58%/57%_47%_53%_43%] bg-[#dceff3] -rotate-2"></div>
+				<div class="art-note">
+					<span class="art-note-icon">✓</span>
+					Un hallazgo,<br />una alegría
+				</div>
+			</div>
+		</section>
+
+		<section class="page-section" aria-labelledby="found-title">
+			<div class="page-section-heading">
+				<div>
+					<p class="page-section-kicker">La comunidad comparte</p>
+					<h2 id="found-title">Objetos encontrados</h2>
+					<p>Estos objetos esperan reencontrarse con sus dueños.</p>
+				</div>
+				<div class="listing-count"><span>8</span> avisos recientes</div>
+			</div>
+
+			<label class="page-search">
+				<span class="page-search-icon" aria-hidden="true">⌕</span>
+				<span class="sr-only">Buscar objetos encontrados</span>
+				<input type="search" placeholder="Busca por nombre, categoría o lugar..." />
+			</label>
+
+			<nav class="page-tabs" aria-label="Categorías de objetos encontrados">
+				<a class="page-tab active" href="/encontrados">Todos <span>8</span></a>
+				<a class="page-tab" href="/encontrados">Mochilas y bolsos</a>
+				<a class="page-tab" href="/encontrados">Tecnología</a>
+				<a class="page-tab" href="/encontrados">Útiles</a>
+				<a class="page-tab" href="/encontrados">Otros</a>
+			</nav>
+
+			<div class="listing-grid">
+				<article class="listing-card">
+					<div class="listing-card-art">
+						<span class="listing-card-emoji" aria-hidden="true">🔑</span>
+						<span class="listing-card-tag">Accesorios</span>
+					</div>
+					<div class="listing-card-body">
+						<h3>Juego de llaves</h3>
+						<p>Dos llaves con un llavero pequeño de madera.</p>
+						<div class="listing-card-meta"><span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>Entrada principal</span><span>Hoy</span></div>
+					</div>
+				</article>
+
+				<article class="listing-card">
+					<div class="listing-card-art bg-gradient-to-br from-[#e5f3f7] to-[#edf6f5]">
+						<span class="listing-card-emoji" aria-hidden="true">🧥</span>
+						<span class="listing-card-tag">Ropa</span>
+					</div>
+					<div class="listing-card-body">
+						<h3>Campera azul</h3>
+						<p>Quedó en el respaldo de una silla.</p>
+						<div class="listing-card-meta"><span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>Salón de actos</span><span>Ayer</span></div>
+					</div>
+				</article>
+
+				<article class="listing-card">
+					<div class="listing-card-art bg-gradient-to-br from-[#f0eef9] to-[#eaf5f3]">
+						<span class="listing-card-emoji" aria-hidden="true">📔</span>
+						<span class="listing-card-tag">Útiles</span>
+					</div>
+					<div class="listing-card-body">
+						<h3>Agenda color lavanda</h3>
+						<p>Tiene una cinta celeste como señalador.</p>
+						<div class="listing-card-meta"><span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>Biblioteca</span><span>Hace 2 días</span></div>
+					</div>
+				</article>
+			</div>
+			<p class="listing-note">Mostrando 3 de 8 avisos</p>
+		</section>
+
+		<aside class="page-callout">
+			<div class="page-callout-icon" aria-hidden="true">✦</div>
+			<div>
+				<h2>¿Es algo que perdiste?</h2>
+				<p>Revisa los avisos o cuéntanos qué estás buscando.</p>
+			</div>
+			<a href="/perdidos">Ver objetos perdidos <span aria-hidden="true">→</span></a>
+		</aside>
+
+		<footer class="page-footer">
+			<span>Hecho con <span class="page-footer-heart" aria-label="cariño">♥</span> para nuestra comunidad</span>
+			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
+		</footer>
+	</main>
+</Layout>

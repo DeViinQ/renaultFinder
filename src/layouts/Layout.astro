@@ -1,10 +1,10 @@
 ---
 import "../styles/global.css";
+import ReportLostModal from "../components/ReportLostModal.astro";
 interface Props {
 	title: string;
 }
 const { title } = Astro.props;
-// PASTELES VERDES Y CELESTES
 ---
 <!doctype html>
 <html lang="es">
@@ -13,29 +13,31 @@ const { title } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="text-center flex flex-col h-32 bg-gray-950 text-white">
-		<header
-			class="backdrop-blur-2xl p-4 flex items-center justify-between"
-		>
-			<div class="flex items-center gap-x-4">
-				<img
-					src="/img/logo.png"
-					alt="Logo"
-					class="mx-auto mb-2 w-16 h-16"
-				/>
-				<h1 class="text-2xl font-bold">{title}</h1>
-			</div>
-
-			<div class="flex gap-x-4">
-				<a href="/">Home</a>
-				<a href="/busqueda">Buscar Objeto</a>
-				<a href="/perdidos">Objetos Perdidos</a>
-				<a href="/encontrados">Objetos Encontrados</a>
+	<body>
+		<header class="site-header">
+			<div class="header-inner">
+				<a class="brand" href="/" aria-label="Renault Finder, inicio">
+					<img src="/img/logo.png" alt="" />
+					<span>Renault <strong>Finder</strong></span>
+				</a>
+				<nav aria-label="Navegación principal">
+					<a href="/" aria-current={Astro.url.pathname === "/" ? "page" : undefined}>Inicio</a>
+					<a href="/busqueda" aria-current={Astro.url.pathname === "/busqueda" ? "page" : undefined}>Buscar objeto</a>
+					<a href="/perdidos" aria-current={Astro.url.pathname === "/perdidos" ? "page" : undefined}>Perdidos</a>
+					<a href="/encontrados" aria-current={Astro.url.pathname === "/encontrados" ? "page" : undefined}>Encontrados</a>
+				</nav>
 			</div>
 		</header>
 		<slot />
+		<ReportLostModal />
 	</body>
 </html>

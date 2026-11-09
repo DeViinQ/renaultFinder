@@ -13,13 +13,25 @@ if (error) {
 
 {
     avisos?.map((aviso) => (
-        <article>
-            <h2>{aviso.title}</h2>
-            <p>Ubicación: {aviso.place}</p>
-            <p>{aviso.details}</p>
-            <p>{new Date(aviso.created_at).toLocaleDateString("es-AR")}</p>
-            <b>{aviso.type}</b>
-            {aviso.imageurl && <img src={aviso.imageurl} alt={aviso.title} />}
+        <article class="listing-card">
+            <div class="listing-card-art">
+                {aviso.imageurl ? (
+                    <img src={aviso.imageurl} alt={aviso.title} />
+                ) : (
+                    <span class="listing-card-emoji" aria-hidden="true">🎒</span>
+                )}
+                <span class="listing-card-tag">{aviso.type}</span>
+            </div>
+            <div class="listing-card-body">
+                <h3>{aviso.title}</h3>
+                <p>{aviso.details}</p>
+                <div class="listing-card-meta">
+                    <span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>{aviso.place}</span>
+                    <time datetime={aviso.created_at}>
+                        {new Date(aviso.created_at).toLocaleDateString("es-AR")}
+                    </time>
+                </div>
+            </div>
         </article>
     ))
 }

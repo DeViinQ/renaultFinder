@@ -1,21 +1,92 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Hero from "../components/Hero.astro";
 import Posts from "../components/Posts.astro";
 import { supabase } from "../db/supabase";
+
 const { data, error } = await supabase.from("todos").select("*");
+
+if (error) {
+	console.error(error);
+}
 ---
 
-<Layout title="Renault Finder - Encuentra tus cosas perdidas">
-    {
-        (
-            <ul>
-                {data?.map((entry) => (
-                    <li class="font-bold">{entry.name}</li>
-                ))}
-                <Posts />
-            </ul>
-        )
-    }
-    <Hero></Hero>
+<Layout title="Renault Finder | Encuentra, comparte, sonríe">
+	<main class="design-page">
+		<section class="page-hero">
+			<div class="page-hero-copy">
+				<p class="page-kicker"><span class="size-2 rounded-full bg-[#80c4a0]"></span>La comunidad que te ayuda a encontrar</p>
+				<h1>Lo que perdiste<br /><span>puede volver a ti.</span></h1>
+				<p>
+					Conectamos a quienes perdieron algo con quienes lo encontraron. Busca, comparte y recupera tus cosas en tu zona.
+				</p>
+				<label class="page-search">
+					<span class="page-search-icon" aria-hidden="true">⌕</span>
+					<span class="sr-only">Buscar objetos</span>
+					<input class="border" type="search" placeholder="¿Qué objeto estás buscando?" />
+				</label>
+				<div class="hero-actions">
+					<a class="hero-text-link" href="/busqueda">Ir a búsqueda <span aria-hidden="true">→</span></a>
+					<button class="page-button" type="button" data-open-report-dialog>
+						＋ Reportar objeto perdido
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<section class="page-section" aria-labelledby="shortcuts-title">
+			<div class="page-section-heading">
+				<div>
+					<p class="page-section-kicker">¿Cómo podemos ayudarte?</p>
+					<h2 id="shortcuts-title">Un buen lugar para empezar</h2>
+				</div>
+			</div>
+			<div class="shortcut-grid">
+				<a class="shortcut-card" href="/perdidos">
+					<span class="shortcut-icon" aria-hidden="true">⌕</span>
+					<span>
+						<h3>Perdí un objeto</h3>
+						<p>Explora los avisos y encuentra algo que se parezca.</p>
+					</span>
+					<span class="shortcut-arrow" aria-hidden="true">→</span>
+				</a>
+				<a class="shortcut-card" href="/encontrados">
+					<span class="shortcut-icon" aria-hidden="true">♡</span>
+					<span>
+						<h3>Encontré un objeto</h3>
+						<p>Comparte el hallazgo para ayudar a su dueño.</p>
+					</span>
+					<span class="shortcut-arrow" aria-hidden="true">→</span>
+				</a>
+			</div>
+		</section>
+
+		<section class="page-section" aria-labelledby="recent-title">
+			<div class="page-section-heading">
+				<div>
+					<p class="page-section-kicker">Avisos de la comunidad</p>
+					<h2 id="recent-title">Novedades recientes</h2>
+					<p>Un objeto puede estar más cerca de lo que piensas.</p>
+				</div>
+				<a class="subtle-link" href="/perdidos">Ver todos los avisos <span aria-hidden="true">→</span></a>
+			</div>
+			<div class="listing-grid">
+				<Posts />
+			</div>
+		</section>
+
+		{data && data.length > 0 && (
+			<section class="community-strip" aria-label="Actividad de la comunidad">
+				<span class="community-strip-icon" aria-hidden="true">✿</span>
+				<span>La comunidad sigue compartiendo.</span>
+				<div class="community-names">
+					{data.map((entry) => <span class="community-chip">{entry.name}</span>)}
+				</div>
+			</section>
+		)}
+
+		<footer class="page-footer">
+			<span>Hecho con <span class="page-footer-heart" aria-label="cariño">♥</span> para nuestra comunidad</span>
+			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
+		</footer>
+	</main>
 </Layout>

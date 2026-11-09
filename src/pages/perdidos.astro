@@ -1,7 +1,134 @@
 ---
-import Layout from "../layouts/Layout.astro"
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Perdidos">
-    
+<Layout title="Objetos perdidos | Renault Finder">
+	<main class="lost-page">
+		<section class="intro">
+			<div class="intro-copy">
+				<p class="eyebrow"><span class="eyebrow-dot"></span> Nos ayudamos entre todos</p>
+				<h1>¿Perdiste algo?<br /><span>Vamos a encontrarlo.</span></h1>
+				<p class="intro-description">
+					Explora los objetos reportados por la comunidad y vuelve a conectar con eso que te hace falta.
+				</p>
+				<button class="primary-button" type="button" data-open-report-dialog>
+					<span aria-hidden="true">＋</span> Reportar un objeto perdido
+				</button>
+			</div>
+
+		</section>
+
+		<section class="listings" aria-labelledby="listings-title">
+			<div class="section-heading">
+				<div>
+					<p class="eyebrow section-eyebrow">Un poquito de ayuda</p>
+					<h2 id="listings-title">Objetos que buscan volver a casa</h2>
+					<p class="section-description">Quizá alguien ya encontró eso que estás buscando.</p>
+				</div>
+				<div class="listing-count"><span>12</span> objetos publicados</div>
+			</div>
+
+			<div class="toolbar">
+				<label class="search-box">
+					<span class="search-icon" aria-hidden="true">⌕</span>
+					<span class="sr-only">Buscar objetos</span>
+					<input type="search" placeholder="¿Qué estás buscando?" />
+					<kbd>⌘ K</kbd>
+				</label>
+				<label class="sort-box">
+					<span class="sr-only">Ordenar objetos</span>
+					<select>
+						<option>Más recientes</option>
+						<option>Más antiguos</option>
+					</select>
+				</label>
+			</div>
+
+			<nav class="category-list" aria-label="Categorías de objetos">
+				<a class="category active" href="/perdidos">Todos <span>12</span></a>
+				<a class="category" href="/perdidos">Mochilas y bolsos</a>
+				<a class="category" href="/perdidos">Tecnología</a>
+				<a class="category" href="/perdidos">Útiles</a>
+				<a class="category" href="/perdidos">Otros</a>
+			</nav>
+
+			<div class="object-grid">
+				<article class="object-card">
+					<div class="object-illustration backpack">
+						<span class="item-emoji" aria-hidden="true">🎒</span>
+						<span class="object-tag">Mochilas y bolsos</span>
+						<button class="save-button" type="button" aria-label="Guardar mochila verde">♡</button>
+					</div>
+					<div class="object-info">
+						<div class="object-title-row">
+							<h3>Mochila verde oliva</h3>
+							<span class="status-dot"></span>
+						</div>
+						<p class="object-detail">Con un llavero de estrella azul</p>
+						<div class="object-meta">
+							<span><span aria-hidden="true">⌖</span> Patio central</span>
+							<span>Hace 2 h</span>
+						</div>
+					</div>
+				</article>
+
+				<article class="object-card">
+					<div class="object-illustration headphones">
+						<span class="item-emoji" aria-hidden="true">🎧</span>
+						<span class="object-tag">Tecnología</span>
+						<button class="save-button" type="button" aria-label="Guardar audífonos azules">♡</button>
+					</div>
+					<div class="object-info">
+						<div class="object-title-row">
+							<h3>Audífonos azul cielo</h3>
+							<span class="status-dot"></span>
+						</div>
+						<p class="object-detail">En su estuche, casi nuevos</p>
+						<div class="object-meta">
+							<span><span aria-hidden="true">⌖</span> Biblioteca</span>
+							<span>Hace 5 h</span>
+						</div>
+					</div>
+				</article>
+
+				<article class="object-card">
+					<div class="object-illustration notebook">
+						<span class="item-emoji" aria-hidden="true">📒</span>
+						<span class="object-tag">Útiles</span>
+						<button class="save-button" type="button" aria-label="Guardar cuaderno lila">♡</button>
+					</div>
+					<div class="object-info">
+						<div class="object-title-row">
+							<h3>Cuaderno lila</h3>
+							<span class="status-dot"></span>
+						</div>
+						<p class="object-detail">Tiene un nombre en la primera página</p>
+						<div class="object-meta">
+							<span><span aria-hidden="true">⌖</span> Sala 204</span>
+							<span>Ayer</span>
+						</div>
+					</div>
+				</article>
+			</div>
+
+			<div class="more-row">
+				<p>Mostrando <strong>3</strong> de <strong>12</strong> objetos</p>
+				<button class="secondary-button" type="button">Ver más objetos <span aria-hidden="true">↓</span></button>
+			</div>
+		</section>
+
+		<aside class="help-banner">
+			<div class="help-icon" aria-hidden="true">✦</div>
+			<div>
+				<h2>¿Encontraste algo que no es tuyo?</h2>
+				<p>Un pequeño gesto puede alegrarle el día a alguien.</p>
+			</div>
+			<a href="/encontrados">Ver objetos encontrados <span aria-hidden="true">→</span></a>
+		</aside>
+
+		<footer class="page-footer">
+			<span>Hecho con <span class="footer-heart" aria-label="cariño">♥</span> para nuestra comunidad</span>
+			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
+		</footer>
+	</main>
 </Layout>
