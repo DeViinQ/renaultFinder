@@ -2,11 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../db/supabase";
 
-const { data: avisos, error } = await supabase
+const category = Astro.url.searchParams.get("category");
+
+let query = supabase
 	.from("avisos")
 	.select("*")
-	.eq("type", "Encontrado")
-	.order("created_at", { ascending: false });
+	.eq("type", "Encontrado");
+
+if (category) {
+	query = query.eq("category", category);
+}
+
+const { data: avisos, error } = await query.order("created_at", { ascending: false });
 
 if (error) {
 	console.error(error);
@@ -50,12 +57,12 @@ if (error) {
 				<input type="search" placeholder="Busca por nombre, categoría o lugar..." />
 			</label>
 
-			<nav class="page-tabs" aria-label="Categorías de objetos encontrados">
-				<a class="page-tab active" href="/encontrados">Todos</a>
-				<a class="page-tab" href="/encontrados">Mochilas y bolsos</a>
-				<a class="page-tab" href="/encontrados">Tecnología</a>
-				<a class="page-tab" href="/encontrados">Útiles</a>
-				<a class="page-tab" href="/encontrados">Otros</a>
+			<nav class="category-list" aria-label="Categorías de objetos">
+				<a class={!category ? "category active" : "category"} href="/encontrados">Todos</a>
+				<a class={category === "Mochilas y bolsos" ? "category active" : "category"} href="/encontrados?category=Mochilas+y+bolsos">Mochilas y bolsos</a>
+				<a class={category === "Tecnología" ? "category active" : "category"} href="/encontrados?category=Tecnología">Tecnología</a>
+				<a class={category === "Útiles" ? "category active" : "category"} href="/encontrados?category=Útiles">Útiles</a>
+				<a class={category === "Otros" ? "category active" : "category"} href="/encontrados?category=Otros">Otros</a>
 			</nav>
 
 			<div class="listing-grid">

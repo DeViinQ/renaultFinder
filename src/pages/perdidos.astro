@@ -2,11 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import { supabase } from "../db/supabase";
 
-const { data: avisos, error } = await supabase
+const category = Astro.url.searchParams.get("category");
+
+let query = supabase
 	.from("avisos")
 	.select("*")
-	.eq("type", "Perdido")
-	.order("created_at", { ascending: false });
+	.eq("type", "Perdido");
+
+if (category) {
+	query = query.eq("category", category);
+}
+
+const { data: avisos, error } = await query.order("created_at", { ascending: false });
 
 if (error) {
 	console.error(error);
@@ -55,11 +62,11 @@ if (error) {
 			</div>
 
 			<nav class="category-list" aria-label="Categorías de objetos">
-				<a class="category active" href="/perdidos">Todos</a>
-				<a class="category" href="/perdidos">Mochilas y bolsos</a>
-				<a class="category" href="/perdidos">Tecnología</a>
-				<a class="category" href="/perdidos">Útiles</a>
-				<a class="category" href="/perdidos">Otros</a>
+				<a class={!category ? "category active" : "category"} href="/perdidos">Todos</a>
+				<a class={category === "Mochilas y bolsos" ? "category active" : "category"} href="/perdidos?category=Mochilas+y+bolsos">Mochilas y bolsos</a>
+				<a class={category === "Tecnología" ? "category active" : "category"} href="/perdidos?category=Tecnología">Tecnología</a>
+				<a class={category === "Útiles" ? "category active" : "category"} href="/perdidos?category=Útiles">Útiles</a>
+				<a class={category === "Otros" ? "category active" : "category"} href="/perdidos?category=Otros">Otros</a>
 			</nav>
 
 			<div class="object-grid">
