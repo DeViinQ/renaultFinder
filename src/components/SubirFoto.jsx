@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 
 export default function SubirFoto({ form, setForm }) {
+  const inputId = useId();
   // 1. Estado para guardar la foto seleccionada y mostrarla
   const [fotoPrevia, setFotoPrevia] = useState(form?.img || null);
 
@@ -33,14 +34,14 @@ export default function SubirFoto({ form, setForm }) {
 
   return (
     <div className="upload-box-content">
-      <label htmlFor="mi-input" className="upload-box-trigger">
+      <label htmlFor={inputId} className="upload-box-trigger">
         {fotoPrevia ? "Cambiar foto" : "Haz clic aquí para seleccionar una foto"}
       </label>
       <span>{fotoPrevia ? "Imagen seleccionada" : "JPG o PNG"}</span>
 
       {/* El input oculto */}
       <input
-        id="mi-input"
+        id={inputId}
         type="file"
         accept=".jpg, .jpeg, .png"
         style={{ display: "none" }}
