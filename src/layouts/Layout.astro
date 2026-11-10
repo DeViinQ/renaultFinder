@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import ReportLostModal from "../components/ReportLostModal.astro";
+import ReportFoundModal from "../components/ReportFoundModal.astro";
 interface Props {
 	title: string;
 }
@@ -39,5 +40,6 @@ const { title } = Astro.props;
 		</header>
 		<slot />
 		<ReportLostModal />
+		<ReportFoundModal />
 	</body>
 </html>

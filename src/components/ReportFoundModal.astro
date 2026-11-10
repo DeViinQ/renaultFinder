@@ -1,0 +1,54 @@
+---
+import ReportFoundForm from "./ReportFoundForm.jsx";
+---
+
+<dialog
+	class="report-dialog"
+	id="report-found-dialog"
+	aria-labelledby="report-found-dialog-title"
+	aria-describedby="report-found-dialog-description"
+>
+	<div class="report-dialog-panel">
+		<div class="report-dialog-heading">
+			<div>
+				<p class="page-section-kicker">Un gesto puede ayudar mucho</p>
+				<h2 id="report-found-dialog-title">Reportar objeto encontrado</h2>
+				<p id="report-found-dialog-description">Cuéntanos qué encontraste y dónde. Así será más fácil que vuelva con su dueño.</p>
+			</div>
+			<button class="report-dialog-close" type="button" data-close-report-found-dialog aria-label="Cerrar panel">×</button>
+		</div>
+
+		<ReportFoundForm client:load />
+	</div>
+</dialog>
+
+<script>
+	const reportDialog = document.querySelector<HTMLDialogElement>("#report-found-dialog");
+
+	if (reportDialog) {
+		const openButtons = document.querySelectorAll<HTMLButtonElement>("[data-open-report-found-dialog]");
+		const closeButtons = reportDialog.querySelectorAll<HTMLButtonElement>("[data-close-report-found-dialog]");
+		let lastTrigger: HTMLButtonElement | null = null;
+
+		openButtons.forEach((button) => {
+			button.addEventListener("click", () => {
+				lastTrigger = button;
+				reportDialog.showModal();
+			});
+		});
+
+		closeButtons.forEach((button) => {
+			button.addEventListener("click", () => reportDialog.close());
+		});
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && reportDialog.open) reportDialog.close();
+		});
+
+		reportDialog.addEventListener("close", () => lastTrigger?.focus());
+
+		reportDialog.addEventListener("click", (event) => {
+			if (event.target === reportDialog) reportDialog.close();
+		});
+	}
+</script>

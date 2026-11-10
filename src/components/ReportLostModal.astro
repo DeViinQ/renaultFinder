@@ -1,3 +1,7 @@
+---
+import ReportLostForm from "./ReportLostForm.jsx";
+---
+
 <dialog
 	class="report-dialog"
 	id="report-lost-dialog"
@@ -14,42 +18,7 @@
 			<button class="report-dialog-close" type="button" data-close-report-dialog aria-label="Cerrar panel">×</button>
 		</div>
 
-		<form class="form-fields">
-			<label class="form-field">
-				Nombre del objeto
-				<input type="text" name="name" placeholder="Ej. Mochila verde" />
-			</label>
-			<label class="form-field">
-				Categoría
-				<select name="category">
-					<option value="">Selecciona una categoría</option>
-					<option>Mochilas y bolsos</option>
-					<option>Tecnología</option>
-					<option>Útiles</option>
-					<option>Otros</option>
-				</select>
-			</label>
-			<label class="form-field full">
-				Descripción
-				<textarea name="details" placeholder="Color, marca, detalles particulares..."></textarea>
-			</label>
-			<label class="form-field">
-				¿Dónde lo viste por última vez?
-				<input type="text" name="place" placeholder="Ej. Patio central" />
-			</label>
-			<label class="form-field">
-				Fecha aproximada
-				<input type="date" name="date" />
-			</label>
-			<div class="form-field full">
-				Imagen del objeto
-				<div class="upload-box">＋ Añadir una imagen <span>JPG o PNG, hasta 10 MB</span></div>
-			</div>
-			<div class="report-dialog-actions">
-				<button class="page-button secondary" type="button" data-close-report-dialog>Cancelar</button>
-				<button class="page-button" type="button">Publicar aviso <span aria-hidden="true">→</span></button>
-			</div>
-		</form>
+		<ReportLostForm client:load />
 	</div>
 </dialog>
 

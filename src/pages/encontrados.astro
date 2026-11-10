@@ -1,5 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { supabase } from "../db/supabase";
+
+const { data: avisos, error } = await supabase
+	.from("avisos")
+	.select("*")
+	.eq("type", "Encontrado")
+	.order("created_at", { ascending: false });
+
+if (error) {
+	console.error(error);
+}
 ---
 
 <Layout title="Objetos encontrados | Renault Finder">
@@ -11,7 +22,7 @@ import Layout from "../layouts/Layout.astro";
 				<p>
 					Publica los detalles del objeto para que su dueño pueda reconocerlo. La comunidad te ayuda con el reencuentro.
 				</p>
-				<a class="page-button" href="/busqueda">＋ Compartir un objeto encontrado</a>
+				<button class="page-button" type="button" data-open-report-found-dialog>＋ Compartir un objeto encontrado</button>
 			</div>
 			<div class="page-hero-art" aria-hidden="true">
 				<div class="absolute top-3 right-[30px] size-[155px] rounded-full bg-[#e2f2e9]"></div>
@@ -30,7 +41,7 @@ import Layout from "../layouts/Layout.astro";
 					<h2 id="found-title">Objetos encontrados</h2>
 					<p>Estos objetos esperan reencontrarse con sus dueños.</p>
 				</div>
-				<div class="listing-count"><span>8</span> avisos recientes</div>
+				{avisos && <div class="listing-count"><span>{avisos.length}</span> avisos</div>}
 			</div>
 
 			<label class="page-search">
@@ -40,7 +51,7 @@ import Layout from "../layouts/Layout.astro";
 			</label>
 
 			<nav class="page-tabs" aria-label="Categorías de objetos encontrados">
-				<a class="page-tab active" href="/encontrados">Todos <span>8</span></a>
+				<a class="page-tab active" href="/encontrados">Todos</a>
 				<a class="page-tab" href="/encontrados">Mochilas y bolsos</a>
 				<a class="page-tab" href="/encontrados">Tecnología</a>
 				<a class="page-tab" href="/encontrados">Útiles</a>
@@ -48,43 +59,31 @@ import Layout from "../layouts/Layout.astro";
 			</nav>
 
 			<div class="listing-grid">
-				<article class="listing-card">
-					<div class="listing-card-art">
-						<span class="listing-card-emoji" aria-hidden="true">🔑</span>
-						<span class="listing-card-tag">Accesorios</span>
-					</div>
-					<div class="listing-card-body">
-						<h3>Juego de llaves</h3>
-						<p>Dos llaves con un llavero pequeño de madera.</p>
-						<div class="listing-card-meta"><span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>Entrada principal</span><span>Hoy</span></div>
-					</div>
-				</article>
-
-				<article class="listing-card">
-					<div class="listing-card-art bg-gradient-to-br from-[#e5f3f7] to-[#edf6f5]">
-						<span class="listing-card-emoji" aria-hidden="true">🧥</span>
-						<span class="listing-card-tag">Ropa</span>
-					</div>
-					<div class="listing-card-body">
-						<h3>Campera azul</h3>
-						<p>Quedó en el respaldo de una silla.</p>
-						<div class="listing-card-meta"><span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>Salón de actos</span><span>Ayer</span></div>
-					</div>
-				</article>
-
-				<article class="listing-card">
-					<div class="listing-card-art bg-gradient-to-br from-[#f0eef9] to-[#eaf5f3]">
-						<span class="listing-card-emoji" aria-hidden="true">📔</span>
-						<span class="listing-card-tag">Útiles</span>
-					</div>
-					<div class="listing-card-body">
-						<h3>Agenda color lavanda</h3>
-						<p>Tiene una cinta celeste como señalador.</p>
-						<div class="listing-card-meta"><span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>Biblioteca</span><span>Hace 2 días</span></div>
-					</div>
-				</article>
+				{avisos && avisos.length > 0 ? (
+					avisos.map((aviso) => (
+						<article class="listing-card">
+							<div class="listing-card-art">
+								{aviso.imageurl ? (
+									<img src={aviso.imageurl} alt={aviso.title} />
+								) : (
+									<span class="listing-card-emoji" aria-hidden="true">🔑</span>
+								)}
+								<span class="listing-card-tag">{aviso.category || "Objeto"}</span>
+							</div>
+							<div class="listing-card-body">
+								<h3>{aviso.title}</h3>
+								<p>{aviso.details}</p>
+								<div class="listing-card-meta">
+									<span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>{aviso.place}</span>
+									<span>{aviso.created_at ? new Date(aviso.created_at).toLocaleDateString("es-AR") : ""}</span>
+								</div>
+							</div>
+						</article>
+					))
+				) : (
+					<p class="section-description">Todavía no hay objetos encontrados publicados.</p>
+				)}
 			</div>
-			<p class="listing-note">Mostrando 3 de 8 avisos</p>
 		</section>
 
 		<aside class="page-callout">
@@ -97,7 +96,6 @@ import Layout from "../layouts/Layout.astro";
 		</aside>
 
 		<footer class="page-footer">
-			<span>Hecho con <span class="page-footer-heart" aria-label="cariño">♥</span> para nuestra comunidad</span>
 			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
 		</footer>
 	</main>

@@ -318,11 +318,23 @@
 	}
 
 	.upload-box {
-		@apply grid min-h-[95px] place-content-center gap-[5px] rounded-xl border border-dashed border-[#cfe2d7] bg-[#f8fcf9] text-center text-xs font-bold text-[#71998a];
+		@apply grid min-h-[95px] place-content-center gap-[5px] rounded-xl border border-dashed border-[#cfe2d7] bg-[#f8fcf9] p-4 text-center text-xs font-bold text-[#71998a];
 	}
 
 	.upload-box span {
 		@apply text-[11px] font-medium text-[#9aa8a2];
+	}
+
+	.upload-box-content {
+		@apply grid place-items-center gap-2;
+	}
+
+	.upload-box-trigger {
+		@apply cursor-pointer text-[#5b9981] underline decoration-[#b9d8c8] underline-offset-2 transition-colors hover:text-[#4a826d];
+	}
+
+	.upload-preview {
+		@apply mt-1 max-h-[140px] w-auto max-w-full rounded-[10px] border border-[#e5eeea] object-cover shadow-sm;
 	}
 
 	.form-aside {
