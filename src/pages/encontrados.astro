@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import { supabase } from "../db/supabase";
 
 const category = Astro.url.searchParams.get("category");
+const place = Astro.url.searchParams.get("place");
+const date = Astro.url.searchParams.get("date");
 
 let query = supabase
 	.from("avisos")
@@ -11,6 +13,12 @@ let query = supabase
 
 if (category) {
 	query = query.eq("category", category);
+}
+if (place) {
+	query = query.ilike("place", `%${place}%`);
+}
+if (date) {
+	query = query.gte("created_at", date);
 }
 
 const { data: avisos, error } = await query.order("created_at", { ascending: false });
@@ -51,11 +59,13 @@ if (error) {
 				{avisos && <div class="listing-count"><span>{avisos.length}</span> avisos</div>}
 			</div>
 
-			<label class="page-search">
+			<form method="get" class="page-search">
 				<span class="page-search-icon" aria-hidden="true">⌕</span>
 				<span class="sr-only">Buscar objetos encontrados</span>
-				<input type="search" placeholder="Busca por nombre, categoría o lugar..." />
-			</label>
+				<input type="search" name="place" placeholder="Filtrar por lugar..." value={place || ""} />
+				<input type="date" name="date" value={date || ""} />
+				<button type="submit">Filtrar</button>
+			</form>
 
 			<nav class="category-list" aria-label="Categorías de objetos">
 				<a class={!category ? "category active" : "category"} href="/encontrados">Todos</a>
