@@ -1,0 +1,15 @@
+---
+import Layout from "../layouts/Layout.astro";
+import AuthForm from "../components/AuthForm.jsx";
+---
+<Layout title="Iniciar sesión | Renault Finder">
+  <main class="design-page">
+    <section class="page-hero">
+      <div class="page-hero-copy">
+        <h1>Iniciar sesión</h1>
+        <p>Accedé con tu mail institucional @alumnos.itr.edu.ar</p>
+        <AuthForm client:load />
+      </div>
+    </section>
+  </main>
+</Layout>

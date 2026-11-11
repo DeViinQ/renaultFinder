@@ -1014,3 +1014,30 @@
 		}
 	}
 }
+
+.page-hero-copy h1 { text-align: center; }
+.page-hero-copy p { text-align: center; }
+
+
+.page-hero-copy button { margin: 4px; padding: 8px 16px; border-radius: 8px; }
+
+
+.page-hero-copy h1 { text-align: center; margin-bottom: 0.5rem; }
+.page-hero-copy p { text-align: center; color: #555; margin-bottom: 1.5rem; }
+.page-hero-copy input { width: 100%; padding: 10px 14px; margin: 6px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 1rem; transition: border-color .2s; }
+.page-hero-copy input:focus { border-color: #80c4a0; outline: none; box-shadow: 0 0 0 3px rgba(128,196,160,.25); }
+.page-hero-copy button { width: 100%; padding: 10px; margin: 6px 0; border: none; border-radius: 10px; background: #80c4a0; color: #fff; font-weight: 600; cursor: pointer; transition: background .2s; }
+.page-hero-copy button:hover { background: #6ea991; }
+.page-hero-copy button.secondary { background: #e2f2e9; color: #1f7a4d; }
+.page-hero-copy button.secondary:hover { background: #d0e8dc; }
+
+
+.page-hero-copy h1 { text-align: left; font-size: 1.6rem; margin-bottom: .25rem; }
+.page-hero-copy p { text-align: left; color: #666; margin-bottom: 1.25rem; font-size: .95rem; }
+.page-hero-copy input { width: 100%; padding: 9px 12px; margin: 5px 0; border: 1px solid #d9d5cc; border-radius: 8px; font-size: 1rem; background: #fff; }
+.page-hero-copy input:focus { border-color: #6ea991; outline: none; }
+.page-hero-copy button { width: 100%; padding: 9px; margin: 5px 0; border: none; border-radius: 8px; background: #5f9a82; color: #fff; font-weight: 600; cursor: pointer; }
+.page-hero-copy button:hover { background: #4f8570; }
+.page-hero-copy button.secondary { background: transparent; color: #5f9a82; border: 1px solid #5f9a82; }
+.page-hero-copy button.secondary:hover { background: #eaf3ef; }
+

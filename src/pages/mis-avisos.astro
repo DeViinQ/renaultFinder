@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+<Layout title="Mis avisos | Renault Finder">
+	<main class="design-page">
+		<section class="page-hero">
+			<div class="page-hero-copy">
+				<h1>Mis avisos</h1>
+				<p>Todos los objetos que reportaste como perdidos o encontrados.</p>
+			</div>
+		</section>
+
+		<section class="page-section" aria-labelledby="mis-avisos-title">
+			<div class="page-section-heading">
+				<div>
+					<p class="page-section-kicker">Tu actividad</p>
+					<h2 id="mis-avisos-title">Objetos que reportaste</h2>
+				</div>
+			</div>
+			<div class="listing-grid" id="mis-avisos-grid">
+				<p class="section-description" id="mis-avisos-loading">Cargando tus avisos...</p>
+			</div>
+		</section>
+	</main>
+	<script>
+		import { supabase } from "../db/supabase";
+		const grid = document.getElementById("mis-avisos-grid");
+		supabase.auth.getSession().then(async ({ data }) => {
+			if (!data.session) { window.location.href = "/login"; return; }
+			const { data: avisos } = await supabase
+				.from("avisos")
+				.select("*")
+				.eq("user_id", data.session.user.id)
+				.order("created_at", { ascending: false });
+			if (!grid) return;
+			if (!avisos || avisos.length === 0) {
+				grid.innerHTML = '<p class="section-description">Todavía no publicaste avisos.</p>';
+				return;
+			}
+			grid.innerHTML = avisos.map((a) => `
+				<article class="listing-card">
+					<div class="listing-card-art">
+						${a.imageurl ? `<img src="${a.imageurl}" alt="${a.title}" />` : '<span class="listing-card-emoji" aria-hidden="true">🎒</span>'}
+						<span class="listing-card-tag">${a.type}</span>
+					</div>
+					<div class="listing-card-body">
+						<h3>${a.title}</h3>
+						<p>${a.details}</p>
+						<div class="listing-card-meta">
+							<span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>${a.place}</span>
+							<span>${a.created_at ? new Date(a.created_at).toLocaleDateString("es-AR") : ""}</span>
+						</div>
+					</div>
+				</article>
+			`).join("");
+		});
+	</script>
+</Layout>

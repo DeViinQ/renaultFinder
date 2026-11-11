@@ -13,6 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
       category: body.category ?? "",
       date: body.date ?? null,
       imageurl: body.imageurl ?? null,
+      user_id: body.user_id ?? null,
     };
 
     if (!aviso.title || !aviso.details || !aviso.place) {

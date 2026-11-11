@@ -35,11 +35,43 @@ const { title } = Astro.props;
 					<a href="/busqueda" aria-current={Astro.url.pathname === "/busqueda" ? "page" : undefined}>Buscar objeto</a>
 					<a href="/perdidos" aria-current={Astro.url.pathname === "/perdidos" ? "page" : undefined}>Perdidos</a>
 					<a href="/encontrados" aria-current={Astro.url.pathname === "/encontrados" ? "page" : undefined}>Encontrados</a>
-				</nav>
+				<a href="/login" id="auth-link">Iniciar sesión</a>
+				<div id="user-menu" style="display:none; position:relative;">
+					<button id="auth-avatar" style="width:32px; height:32px; border-radius:50%; background:#80c4a0; color:#fff; border:none; cursor:pointer; font-weight:700;"></button>
+					<div id="user-dropdown" style="display:none; position:absolute; right:0; top:40px; background:#fff; border:1px solid #e6e2d8; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,.1); padding:10px; min-width:200px; z-index:50;">
+						<a id="mis-avisos-link" href="/mis-avisos" style="display:block; text-align:center; padding:7px; margin-bottom:8px; border-radius:8px; border:1px solid #5f9a82; color:#5f9a82; text-decoration:none; font-weight:600;">Mis avisos</a>
+						<button id="logout-btn" style="width:100%; padding:7px; border:none; border-radius:8px; background:#5f9a82; color:#fff; cursor:pointer; font-weight:600;" onclick="window.logout()">Cerrar sesión</button>
+					</div>
+				</div>
+			</nav>
 			</div>
 		</header>
 		<slot />
 		<ReportLostModal />
 		<ReportFoundModal />
+		<script>
+			import { supabase } from "../db/supabase";
+			const path = window.location.pathname;
+			const link = document.getElementById("auth-link");
+			const menu = document.getElementById("user-menu");
+			const avatar = document.getElementById("auth-avatar");
+			const dropdown = document.getElementById("user-dropdown");
+			window.logout = async () => { await supabase.auth.signOut(); window.location.href = "/login"; };
+			avatar?.addEventListener("click", () => {
+				dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+			});
+				supabase.auth.getSession().then(({ data }) => {
+				if (data.session) {
+					if (link) link.style.display = "none";
+					if (menu) menu.style.display = "inline-block";
+					if (avatar) {
+						const email = data.session.user.email || "";
+						avatar.textContent = email.charAt(0).toUpperCase();
+					}
+				} else {
+					if (path !== "/login") window.location.href = "/login";
+				}
+			});
+		</script>
 	</body>
 </html>

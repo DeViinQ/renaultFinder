@@ -1,5 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { supabase } from "../db/supabase";
+
+const q = Astro.url.searchParams.get("q") || "";
+let avisos = [];
+if (q) {
+  const { data } = await supabase
+    .from("avisos")
+    .select("*")
+    .or(`title.ilike.%${q}%,details.ilike.%${q}%,place.ilike.%${q}%`)
+    .order("created_at", { ascending: false });
+  avisos = data || [];
+}
 ---
 
 <Layout title="Buscar y reportar | Renault Finder">
@@ -11,11 +23,11 @@ import Layout from "../layouts/Layout.astro";
 				<p>
 					Busca entre los avisos de la comunidad o comparte los detalles de ese objeto que quieres volver a encontrar.
 				</p>
-				<label class="page-search">
+				<form method="get" action="/busqueda" class="page-search">
 					<span class="page-search-icon" aria-hidden="true">⌕</span>
 					<span class="sr-only">Buscar un objeto</span>
-					<input type="search" placeholder="Ej. mochila, llaves, cuaderno..." />
-				</label>
+					<input type="search" name="q" placeholder="Ej. mochila, llaves, cuaderno..." value={q} />
+				</form>
 			</div>
 			<div class="page-hero-art" aria-hidden="true">
 				<div class="absolute top-3 right-[30px] size-[155px] rounded-full bg-[#e2f2e9]"></div>
@@ -26,6 +38,39 @@ import Layout from "../layouts/Layout.astro";
 				</div>
 			</div>
 		</section>
+
+		{q && (
+			<section class="page-section" aria-labelledby="results-title">
+				<div class="page-section-heading">
+					<div>
+						<p class="page-section-kicker">Resultados</p>
+						<h2 id="results-title">Avisos que coinciden con "{q}"</h2>
+					</div>
+				</div>
+				<div class="listing-grid">
+					{avisos.length > 0 ? (
+						avisos.map((aviso) => (
+							<article class="listing-card">
+								<div class="listing-card-art">
+									{aviso.imageurl ? <img src={aviso.imageurl} alt={aviso.title} /> : <span class="listing-card-emoji" aria-hidden="true">🎒</span>}
+									<span class="listing-card-tag">{aviso.type}</span>
+								</div>
+								<div class="listing-card-body">
+									<h3>{aviso.title}</h3>
+									<p>{aviso.details}</p>
+									<div class="listing-card-meta">
+										<span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>{aviso.place}</span>
+										<span>{aviso.created_at ? new Date(aviso.created_at).toLocaleDateString("es-AR") : ""}</span>
+									</div>
+								</div>
+							</article>
+						))
+					) : (
+						<p class="section-description">No se encontraron avisos que coincidan.</p>
+					)}
+				</div>
+			</section>
+		)}
 
 		<section class="page-section" aria-labelledby="report-title">
 			<div class="page-section-heading">

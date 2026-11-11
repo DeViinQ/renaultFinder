@@ -19,11 +19,11 @@ if (error) {
 				<p>
 					Conectamos a quienes perdieron algo con quienes lo encontraron. Busca, comparte y recupera tus cosas en tu zona.
 				</p>
-				<label class="page-search">
+				<form method="get" action="/busqueda" class="page-search">
 					<span class="page-search-icon" aria-hidden="true">⌕</span>
 					<span class="sr-only">Buscar objetos</span>
-					<input class="border" type="search" placeholder="¿Qué objeto estás buscando?" />
-				</label>
+					<input class="border" type="search" name="q" placeholder="¿Qué objeto estás buscando?" />
+				</form>
 				<div class="hero-actions">
 					<a class="hero-text-link" href="/busqueda">Ir a búsqueda <span aria-hidden="true">→</span></a>
 					<button class="page-button" type="button" data-open-report-dialog>
