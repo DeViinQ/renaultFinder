@@ -12,13 +12,24 @@ for select
 to anon, authenticated
 using (true);
 
--- 3) Permitir insertar avisos (necesario para publicar desde el formulario)
+-- 3) Permitir insertar avisos solo a usuarios autenticados
+--    y siempre a su propio nombre (auth.uid() = user_id).
 drop policy if exists "Permitir insertar avisos" on public.avisos;
-create policy "Permitir insertar avisos"
+drop policy if exists "Insertar avisos propios" on public.avisos;
+create policy "Insertar avisos propios"
 on public.avisos
 for insert
-to anon, authenticated
-with check (true);
+to authenticated
+with check (auth.uid() = user_id);
 
--- Nota: estas policies son abiertas (permiten a cualquiera leer/insertar).
--- Sirven para desarrollo/aprendizaje. En producción conviene restringirlas.
+-- 4) Cada usuario puede eliminar solo sus propios avisos
+drop policy if exists "Eliminar avisos propios" on public.avisos;
+create policy "Eliminar avisos propios"
+on public.avisos
+for delete
+to authenticated
+using (auth.uid() = user_id);
+
+-- Nota: cualquiera puede leer los avisos, pero solo los usuarios
+-- autenticados pueden publicar y siempre quedan asociados a su cuenta.
+-- Las columnas user_id y author_name se crean en supabase-avisos-autor.sql.

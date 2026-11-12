@@ -1,32 +1,44 @@
 ---
 import { supabase } from "../db/supabase";
 
-const { data: avisos, error } = await supabase
-    .from("avisos")
-    .select("*")
-    .order("created_at", { ascending: false });
+interface Props {
+	avisos?: any[];
+}
 
-if (error) {
-    console.error(error);
+let { avisos } = Astro.props;
+
+// Si la página ya trajo los avisos, no volvemos a consultar la base.
+if (!avisos) {
+	const { data, error } = await supabase
+		.from("avisos")
+		.select("*")
+		.order("created_at", { ascending: false });
+
+	if (error) {
+		console.error(error);
+	}
+
+	avisos = data ?? [];
 }
 ---
 
 {
-    avisos?.map((aviso) => (
-        <article class="listing-card">
-            <div class="listing-card-art">
+    avisos.map((aviso) => (
+        <article class="overflow-hidden rounded-[17px] border border-[#eaf0ee] bg-white shadow-[0_7px_22px_#304d4210] transition duration-200 hover:-translate-y-[3px] hover:shadow-[0_12px_25px_#304d4218] max-[520px]:grid max-[520px]:grid-cols-[118px_minmax(0,1fr)] dark:border-dk-border dark:bg-dk-surface dark:shadow-[0_7px_22px_#00000038] dark:hover:shadow-[0_12px_25px_#0000004d]">
+            <div class="relative grid h-[164px] place-items-center overflow-hidden bg-gradient-to-br from-[#eaf5ed] to-[#e8f3f5] max-[520px]:h-full max-[520px]:min-h-[138px] dark:bg-[linear-gradient(135deg,#16261f,#152428)]">
                 {aviso.imageurl ? (
-                    <img src={aviso.imageurl} alt={aviso.title} />
+                    <img class="size-full object-cover" src={aviso.imageurl} alt={aviso.title} loading="lazy" decoding="async" />
                 ) : (
-                    <span class="listing-card-emoji" aria-hidden="true">🎒</span>
+                    <span class="text-[68px] drop-shadow-[0_8px_8px_#2d454426] max-[520px]:text-[51px]" aria-hidden="true">🎒</span>
                 )}
-                <span class="listing-card-tag">{aviso.type}</span>
+                <span class="absolute bottom-[11px] left-3 rounded-[7px] bg-[#ffffffdf] px-[9px] py-[5px] text-[10px] font-extrabold text-[#668078] capitalize max-[520px]:right-[6px] max-[520px]:bottom-[7px] max-[520px]:left-[6px] max-[520px]:px-[5px] max-[520px]:py-1 max-[520px]:text-center max-[520px]:text-[9px] dark:bg-[#0f1815d9] dark:text-[#a9bdb6]">{aviso.type}</span>
             </div>
-            <div class="listing-card-body">
-                <h3>{aviso.title}</h3>
-                <p>{aviso.details}</p>
-                <div class="listing-card-meta">
-                    <span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>{aviso.place}</span>
+            <div class="px-[15px] pt-[15px] pb-[13px] max-[520px]:px-3 max-[520px]:pt-[15px] max-[520px]:pb-3">
+                <h3 class="mb-1.5 text-[15px] font-extrabold text-[#344a47] max-[520px]:text-sm dark:text-[#e0ebe6]">{aviso.title}</h3>
+                <p class="mb-[13px] text-xs leading-[1.55] text-[#899592] max-[520px]:text-[11px] dark:text-dk-muted">{aviso.details}</p>
+                <p class="mb-[11px] text-[11px] leading-[1.4] text-[#98a39f] dark:text-dk-faint">Publicado por <strong class="font-extrabold text-[#647d75] dark:text-[#a9bdb6]">{aviso.author_name || "Miembro de la comunidad"}</strong></p>
+                <div class="flex justify-between gap-2 border-t border-[#f0f3f2] pt-2.5 text-[11px] text-[#98a39f] max-[520px]:text-[10px] dark:border-dk-border dark:text-dk-faint">
+                    <span><span class="mr-[5px] text-[#6ea991] dark:text-dk-brand" aria-hidden="true">⌖</span>{aviso.place}</span>
                     <time datetime={aviso.created_at}>
                         {new Date(aviso.created_at).toLocaleDateString("es-AR")}
                     </time>

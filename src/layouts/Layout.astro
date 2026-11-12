@@ -1,7 +1,5 @@
 ---
 import "../styles/global.css";
-import ReportLostModal from "../components/ReportLostModal.astro";
-import ReportFoundModal from "../components/ReportFoundModal.astro";
 interface Props {
 	title: string;
 }
@@ -12,66 +10,243 @@ const { title } = Astro.props;
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<meta name="theme-color" content="#fbfdfb" />
+		<!-- Aplica el tema guardado antes de pintar para evitar el parpadeo. -->
+		<script is:inline>
+			(() => {
+				try {
+					const stored = localStorage.getItem("rf-theme");
+					const theme =
+						stored === "light" || stored === "dark"
+							? stored
+							: window.matchMedia("(prefers-color-scheme: dark)").matches
+								? "dark"
+								: "light";
+					document.documentElement.dataset.theme = theme;
+					const meta = document.querySelector('meta[name="theme-color"]');
+					if (meta) meta.setAttribute("content", theme === "dark" ? "#0f1715" : "#fbfdfb");
+				} catch {
+					document.documentElement.dataset.theme = "light";
+				}
+			})();
+		</script>
+		<link rel="icon" type="image/svg+xml" href="/logo.svg" />
+		<link rel="icon" href="/logo.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="preconnect" href={import.meta.env.PUBLIC_SUPABASE_URL} crossorigin />
+		<link rel="dns-prefetch" href={import.meta.env.PUBLIC_SUPABASE_URL} />
+		<!-- La tipografía no bloquea el primer render: se aplica al terminar de cargar. -->
+		<link
+			rel="preload"
+			as="style"
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+		/>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
 			rel="stylesheet"
+			media="print"
+			onload="this.media='all'"
 		/>
+		<noscript>
+			<link
+				href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap"
+				rel="stylesheet"
+			/>
+		</noscript>
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body>
-		<header class="site-header">
-			<div class="header-inner">
-				<a class="brand" href="/" aria-label="Renault Finder, inicio">
-					<img src="/img/logo.png" alt="" />
-					<span>Renault <strong>Finder</strong></span>
+	<body class="m-0 min-h-screen bg-[#fbfdfb] font-nunito text-[#334845] dark:bg-dk-bg dark:text-dk-text">
+		<header class="relative z-[2] border-b border-[#edf2ef] bg-[#ffffffed] dark:border-[#1f2f29] dark:bg-[#0f1715ed] dark:backdrop-blur-[8px]">
+			<div class="mx-auto flex min-h-[72px] w-[min(1120px,calc(100%-48px))] items-center justify-between gap-6 max-[600px]:min-h-[66px] max-[600px]:w-[calc(100%-32px)] max-[600px]:flex-wrap max-[600px]:gap-x-3 max-[600px]:gap-y-1 max-[600px]:py-2.5">
+				<a class="inline-flex items-center gap-2.5 whitespace-nowrap text-[19px] font-medium tracking-[-0.04em] text-[#38564d] no-underline max-[600px]:text-[17px] dark:text-dk-heading" href="/" aria-label="Renault Finder, inicio">
+					<img class="size-[38px] object-contain max-[600px]:size-8 dark:brightness-0 dark:invert" src="/logo.svg" alt="" />
+					<span>Renault <strong class="font-extrabold text-[#69a98b] dark:text-dk-brand">Finder</strong></span>
 				</a>
-				<nav aria-label="Navegación principal">
-					<a href="/" aria-current={Astro.url.pathname === "/" ? "page" : undefined}>Inicio</a>
-					<a href="/busqueda" aria-current={Astro.url.pathname === "/busqueda" ? "page" : undefined}>Buscar objeto</a>
-					<a href="/perdidos" aria-current={Astro.url.pathname === "/perdidos" ? "page" : undefined}>Perdidos</a>
-					<a href="/encontrados" aria-current={Astro.url.pathname === "/encontrados" ? "page" : undefined}>Encontrados</a>
-				<a href="/login" id="auth-link">Iniciar sesión</a>
-				<div id="user-menu" style="display:none; position:relative;">
-					<button id="auth-avatar" style="width:32px; height:32px; border-radius:50%; background:#80c4a0; color:#fff; border:none; cursor:pointer; font-weight:700;"></button>
-					<div id="user-dropdown" style="display:none; position:absolute; right:0; top:40px; background:#fff; border:1px solid #e6e2d8; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,.1); padding:10px; min-width:200px; z-index:50;">
-						<a id="mis-avisos-link" href="/mis-avisos" style="display:block; text-align:center; padding:7px; margin-bottom:8px; border-radius:8px; border:1px solid #5f9a82; color:#5f9a82; text-decoration:none; font-weight:600;">Mis avisos</a>
-						<button id="logout-btn" style="width:100%; padding:7px; border:none; border-radius:8px; background:#5f9a82; color:#fff; cursor:pointer; font-weight:600;" onclick="window.logout()">Cerrar sesión</button>
+				<nav class="flex items-center gap-[7px] max-[600px]:order-2 max-[600px]:w-full max-[600px]:justify-between max-[600px]:gap-0" aria-label="Navegación principal">
+					<a class="rounded-[10px] px-[13px] py-[9px] text-[13px] font-bold text-[#74827e] no-underline transition-colors duration-150 hover:bg-[#edf6f0] hover:text-[#578d73] aria-[current=page]:bg-[#edf6f0] aria-[current=page]:text-[#578d73] max-[600px]:px-2 max-[600px]:py-[7px] max-[600px]:text-[11px] dark:text-dk-muted dark:hover:bg-[#1c2f27] dark:hover:text-[#9ed3b8] dark:aria-[current=page]:bg-[#1c2f27] dark:aria-[current=page]:text-[#9ed3b8]" href="/" aria-current={Astro.url.pathname === "/" ? "page" : undefined}>Inicio</a>
+					<a class="rounded-[10px] px-[13px] py-[9px] text-[13px] font-bold text-[#74827e] no-underline transition-colors duration-150 hover:bg-[#edf6f0] hover:text-[#578d73] aria-[current=page]:bg-[#edf6f0] aria-[current=page]:text-[#578d73] max-[600px]:px-2 max-[600px]:py-[7px] max-[600px]:text-[11px] dark:text-dk-muted dark:hover:bg-[#1c2f27] dark:hover:text-[#9ed3b8] dark:aria-[current=page]:bg-[#1c2f27] dark:aria-[current=page]:text-[#9ed3b8]" href="/busqueda" aria-current={Astro.url.pathname === "/busqueda" ? "page" : undefined}>Buscar objeto</a>
+					<a class="rounded-[10px] px-[13px] py-[9px] text-[13px] font-bold text-[#74827e] no-underline transition-colors duration-150 hover:bg-[#edf6f0] hover:text-[#578d73] aria-[current=page]:bg-[#edf6f0] aria-[current=page]:text-[#578d73] max-[600px]:px-2 max-[600px]:py-[7px] max-[600px]:text-[11px] dark:text-dk-muted dark:hover:bg-[#1c2f27] dark:hover:text-[#9ed3b8] dark:aria-[current=page]:bg-[#1c2f27] dark:aria-[current=page]:text-[#9ed3b8]" href="/perdidos" aria-current={Astro.url.pathname === "/perdidos" ? "page" : undefined}>Perdidos</a>
+					<a class="rounded-[10px] px-[13px] py-[9px] text-[13px] font-bold text-[#74827e] no-underline transition-colors duration-150 hover:bg-[#edf6f0] hover:text-[#578d73] aria-[current=page]:bg-[#edf6f0] aria-[current=page]:text-[#578d73] max-[600px]:px-2 max-[600px]:py-[7px] max-[600px]:text-[11px] dark:text-dk-muted dark:hover:bg-[#1c2f27] dark:hover:text-[#9ed3b8] dark:aria-[current=page]:bg-[#1c2f27] dark:aria-[current=page]:text-[#9ed3b8]" href="/encontrados" aria-current={Astro.url.pathname === "/encontrados" ? "page" : undefined}>Encontrados</a>
+				<a class="rounded-[10px] px-[13px] py-[9px] text-[13px] font-bold text-[#74827e] no-underline transition-colors duration-150 hover:bg-[#edf6f0] hover:text-[#578d73] aria-[current=page]:bg-[#edf6f0] aria-[current=page]:text-[#578d73] max-[600px]:px-2 max-[600px]:py-[7px] max-[600px]:text-[11px] dark:text-dk-muted dark:hover:bg-[#1c2f27] dark:hover:text-[#9ed3b8] dark:aria-[current=page]:bg-[#1c2f27] dark:aria-[current=page]:text-[#9ed3b8]" href="/login" id="auth-link">Iniciar sesión</a>
+				<div id="user-menu" class="relative hidden">
+					<button id="auth-avatar" class="size-8 cursor-pointer rounded-full border-0 bg-[#80c4a0] font-bold text-white"></button>
+					<div id="user-dropdown" class="absolute right-0 top-10 z-50 hidden min-w-[200px] rounded-[10px] border border-[#e6e2d8] bg-white p-2.5 shadow-[0_6px_18px_rgba(0,0,0,.1)] dark:border-dk-border-strong dark:bg-dk-surface dark:shadow-[0_10px_26px_#00000059]">
+						<p id="user-name" class="mb-2 text-center text-[13px] font-bold text-[#294342] dark:text-dk-heading"></p>
+						<a id="mis-avisos-link" href="/mis-avisos" class="mb-2 block rounded-lg border border-[#5f9a82] p-[7px] text-center font-semibold text-[#5f9a82] no-underline dark:border-dk-brand dark:text-dk-brand">Mis avisos</a>
+						<button id="logout-btn" class="w-full cursor-pointer rounded-lg border-0 bg-[#5f9a82] p-[7px] font-semibold text-white" onclick="window.logout()">Cerrar sesión</button>
 					</div>
 				</div>
 			</nav>
+			<button
+				class="inline-grid size-9 shrink-0 cursor-pointer place-items-center rounded-[10px] border border-[#e9efed] bg-white p-0 text-[#5d8f7a] transition hover:bg-[#edf6f0] hover:text-[#578d73] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#80c4a0] max-[600px]:order-1 max-[600px]:ml-auto dark:border-dk-border-strong dark:bg-dk-surface dark:text-dk-brand dark:hover:bg-[#1f302a] dark:hover:text-[#a9e0c5]"
+				id="theme-toggle"
+				type="button"
+				aria-label="Activar tema oscuro"
+				aria-pressed="false"
+				title="Tema oscuro"
+			>
+				<svg
+					class="size-[18px] dark:hidden"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					aria-hidden="true"
+				>
+					<circle cx="12" cy="12" r="4"></circle>
+					<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+				</svg>
+				<svg
+					class="hidden size-[18px] dark:block"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+				</svg>
+			</button>
 			</div>
 		</header>
 		<slot />
-		<ReportLostModal />
-		<ReportFoundModal />
 		<script>
-			import { supabase } from "../db/supabase";
 			const path = window.location.pathname;
 			const link = document.getElementById("auth-link");
 			const menu = document.getElementById("user-menu");
 			const avatar = document.getElementById("auth-avatar");
 			const dropdown = document.getElementById("user-dropdown");
-			window.logout = async () => { await supabase.auth.signOut(); window.location.href = "/login"; };
-			avatar?.addEventListener("click", () => {
-				dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
-			});
-				supabase.auth.getSession().then(({ data }) => {
-				if (data.session) {
-					if (link) link.style.display = "none";
-					if (menu) menu.style.display = "inline-block";
-					if (avatar) {
-						const email = data.session.user.email || "";
-						avatar.textContent = email.charAt(0).toUpperCase();
+			const userName = document.getElementById("user-name");
+
+			// Leemos la sesión que Supabase guarda en localStorage sin cargar
+			// toda la librería (son ~200 KB) en cada página.
+			const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL || "";
+			const projectRef = supabaseUrl ? new URL(supabaseUrl).hostname.split(".")[0] : "";
+			const storageKey = projectRef ? `sb-${projectRef}-auth-token` : "";
+			const AUTH_KEY = /^sb-.*-auth-token$/;
+
+			const readSession = () => {
+				try {
+					let raw = storageKey ? localStorage.getItem(storageKey) : null;
+
+					// Por si el proyecto usa un dominio propio, buscamos la clave.
+					if (!raw) {
+						for (let i = 0; i < localStorage.length; i += 1) {
+							const key = localStorage.key(i);
+							if (key && AUTH_KEY.test(key)) {
+								raw = localStorage.getItem(key);
+								if (raw) break;
+							}
+						}
 					}
-				} else {
-					if (path !== "/login") window.location.href = "/login";
+
+					if (!raw) return null;
+					const parsed = JSON.parse(raw);
+					return parsed && parsed.user ? parsed : null;
+				} catch {
+					return null;
 				}
+			};
+
+			window.logout = async () => {
+				try {
+					// La librería se descarga recién al cerrar sesión.
+					const { supabase } = await import("../db/supabase");
+					await supabase.auth.signOut();
+				} catch {
+					try {
+						const keys = [];
+						for (let i = 0; i < localStorage.length; i += 1) {
+							const key = localStorage.key(i);
+							if (key && AUTH_KEY.test(key)) keys.push(key);
+						}
+						keys.forEach((key) => localStorage.removeItem(key));
+					} catch {
+						/* sin sesión que borrar */
+					}
+				}
+				window.location.href = "/login";
+			};
+
+			avatar?.addEventListener("click", () => {
+				dropdown?.classList.toggle("hidden");
 			});
+
+			const session = readSession();
+
+			if (!session) {
+				if (path !== "/login") window.location.replace("/login");
+			} else {
+				const user = session.user;
+				const email = user.email || "";
+				const metadata = user.user_metadata || {};
+				const displayName = metadata.display_name || metadata.name || "";
+
+				link?.classList.add("hidden");
+				menu?.classList.remove("hidden");
+				if (userName) userName.textContent = "Bienvenido, " + (displayName || email);
+				if (avatar) {
+					// La inicial del avatar sale del nombre visible, no del email.
+					const initial = (displayName || email).charAt(0).toUpperCase();
+					avatar.textContent = initial;
+					avatar.title = displayName || email;
+				}
+			}
+		</script>
+		<script is:inline>
+			(() => {
+				const root = document.documentElement;
+				const toggle = document.getElementById("theme-toggle");
+				const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+				const storedTheme = () => {
+					try {
+						return localStorage.getItem("rf-theme");
+					} catch {
+						return null;
+					}
+				};
+
+				const updateButton = () => {
+					if (!toggle) return;
+					const isDark = root.dataset.theme === "dark";
+					toggle.setAttribute("aria-pressed", String(isDark));
+					toggle.setAttribute("aria-label", isDark ? "Activar tema claro" : "Activar tema oscuro");
+					toggle.title = isDark ? "Tema claro" : "Tema oscuro";
+				};
+
+				const setTheme = (theme, persist = true) => {
+					root.dataset.theme = theme;
+					document
+						.querySelector('meta[name="theme-color"]')
+						?.setAttribute("content", theme === "dark" ? "#0f1715" : "#fbfdfb");
+					if (persist) {
+						try {
+							localStorage.setItem("rf-theme", theme);
+						} catch {
+							/* El tema sigue funcionando aunque no se pueda guardar. */
+						}
+					}
+					updateButton();
+				};
+
+				updateButton();
+
+				toggle?.addEventListener("click", () => {
+					setTheme(root.dataset.theme === "dark" ? "light" : "dark");
+				});
+
+				// Si el usuario no eligió un tema manualmente, seguimos al sistema.
+				media.addEventListener?.("change", (event) => {
+					if (storedTheme()) return;
+					setTheme(event.matches ? "dark" : "light", false);
+				});
+			})();
 		</script>
 	</body>
 </html>

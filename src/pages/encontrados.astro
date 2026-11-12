@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ReportFoundModal from "../components/ReportFoundModal.astro";
 import { supabase } from "../db/supabase";
 
 const category = Astro.url.searchParams.get("category");
@@ -29,91 +30,93 @@ if (error) {
 ---
 
 <Layout title="Objetos encontrados | Renault Finder">
-	<main class="design-page">
-		<section class="page-hero">
-			<div class="page-hero-copy">
-				<p class="page-kicker"><span class="size-2 rounded-full bg-[#80c4a0]"></span>Un gesto puede cambiar el día</p>
-				<h1>¿Encontraste algo?<br /><span>Hagamos que vuelva.</span></h1>
-				<p>
+	<main class="mx-auto w-[min(1120px,calc(100%-48px))] px-0 py-[34px] pb-[30px] text-left font-nunito text-[#294342] max-[760px]:w-[min(560px,calc(100%-32px))] max-[760px]:pt-[22px] dark:text-dk-text">
+		<section class="relative flex min-h-[315px] items-center justify-between gap-[30px] overflow-hidden rounded-[30px] border border-[#e8f1ed] bg-[linear-gradient(112deg,#f3fbf6_0%,#f5fbfd_100%)] px-[8%] py-[42px] max-[760px]:min-h-[300px] max-[760px]:px-7 max-[760px]:py-[34px] max-[520px]:min-h-[315px] max-[520px]:rounded-[23px] max-[520px]:px-[21px] max-[520px]:py-[29px] dark:border-dk-border dark:bg-dk-bg-soft dark:bg-[linear-gradient(112deg,#131f1b_0%,#121d20_100%)]">
+			<div class="relative z-[1] max-w-[610px] max-[760px]:max-w-[460px]">
+				<p class="mb-[15px] flex items-center gap-[9px] text-[12px] font-extrabold tracking-[0.045em] text-[#5b9981] dark:text-dk-brand"><span class="size-2 rounded-full bg-[#80c4a0]"></span>Un gesto puede cambiar el día</p>
+				<h1 class="mb-[13px] text-[clamp(36px,4.4vw,54px)] leading-[1.08] font-extrabold tracking-[-0.045em] text-[#294342] max-[520px]:text-[37px] dark:text-dk-heading">¿Encontraste algo?<br /><span class="text-[#67a98e] dark:text-dk-brand">Hagamos que vuelva.</span></h1>
+				<p class="mb-[23px] max-w-[490px] text-[15px] leading-[1.7] text-[#708482] max-[520px]:max-w-[305px] max-[520px]:text-sm dark:text-dk-muted">
 					Publica los detalles del objeto para que su dueño pueda reconocerlo. La comunidad te ayuda con el reencuentro.
 				</p>
-				<button class="page-button" type="button" data-open-report-found-dialog>＋ Compartir un objeto encontrado</button>
+				<button class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-[9px] rounded-[13px] border border-transparent bg-[#65a98b] px-[17px] text-[13px] font-extrabold text-white no-underline shadow-[0_7px_16px_#65a98b30] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_#65a98b38] dark:bg-dk-brand-strong dark:shadow-[0_7px_16px_#00000045] dark:hover:shadow-[0_10px_20px_#00000052]" type="button" data-open-report-found-dialog>＋ Compartir un objeto encontrado</button>
 			</div>
-			<div class="page-hero-art" aria-hidden="true">
-				<div class="absolute top-3 right-[30px] size-[155px] rounded-full bg-[#e2f2e9]"></div>
-				<div class="absolute right-0 bottom-[5px] h-[130px] w-[230px] rounded-[52%_48%_42%_58%/57%_47%_53%_43%] bg-[#dceff3] -rotate-2"></div>
-				<div class="art-note">
-					<span class="art-note-icon">✓</span>
+			<div class="relative h-[225px] w-[280px] shrink-0 max-[760px]:absolute max-[760px]:right-[-72px] max-[760px]:bottom-[-48px] max-[760px]:opacity-[0.36]" aria-hidden="true">
+				<div class="absolute top-3 right-9 size-[165px] rounded-full bg-[#e4f4eb] dark:bg-[#1a2b24]"></div>
+				<div class="absolute right-0 bottom-2 h-[135px] w-[235px] rounded-[52%_48%_42%_58%/57%_47%_53%_43%] bg-[#dceff3] -rotate-2 dark:bg-[#142528]"></div>
+				<div class="absolute top-11 right-[27px] z-[1] grid h-[137px] w-[194px] place-content-center rounded-[20px] border border-white bg-[#ffffffdf] text-center text-base leading-[1.5] font-extrabold text-[#54726c] shadow-[0_15px_40px_#47746d18] rotate-1 dark:border-[#2c3f38] dark:bg-[#17241fe8] dark:text-[#cfe0d9]">
+					<span class="mx-auto mb-2 grid size-11 place-items-center rounded-full bg-[#e4f3e9] text-2xl text-[#67a98e] dark:bg-[#1e3029] dark:text-dk-brand">✓</span>
 					Un hallazgo,<br />una alegría
 				</div>
 			</div>
 		</section>
 
-		<section class="page-section" aria-labelledby="found-title">
-			<div class="page-section-heading">
+		<section class="px-2 py-[47px] pb-0 max-[760px]:px-0 max-[760px]:pt-10" aria-labelledby="found-title">
+			<div class="mb-[21px] flex items-end justify-between gap-6 max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-2">
 				<div>
-					<p class="page-section-kicker">La comunidad comparte</p>
-					<h2 id="found-title">Objetos encontrados</h2>
-					<p>Estos objetos esperan reencontrarse con sus dueños.</p>
+					<p class="mb-2 text-[11px] font-extrabold tracking-[0.045em] text-[#5b9981] uppercase dark:text-dk-brand">La comunidad comparte</p>
+					<h2 class="mb-[7px] text-[clamp(22px,2.4vw,28px)] font-extrabold tracking-[-0.035em] text-[#2d4341] dark:text-dk-heading" id="found-title">Objetos encontrados</h2>
+					<p class="mb-0 text-sm text-[#748584] dark:text-dk-muted">Estos objetos esperan reencontrarse con sus dueños.</p>
 				</div>
-				{avisos && <div class="listing-count"><span>{avisos.length}</span> avisos</div>}
+				{avisos && <div class="pb-1 text-[13px] whitespace-nowrap text-[#859290] dark:text-dk-faint"><span class="font-extrabold text-[#5b9981] dark:text-dk-brand">{avisos.length}</span> avisos</div>}
 			</div>
 
-			<form method="get" class="page-search">
-				<span class="page-search-icon" aria-hidden="true">⌕</span>
+			<form method="get" class="flex h-[50px] w-[min(540px,100%)] items-center gap-[11px] rounded-[14px] border border-[#e4eeea] bg-white px-[14px] shadow-[0_7px_20px_#3a69500c] dark:border-dk-border-strong dark:bg-dk-surface">
+				<span class="text-[21px] text-[#75a997] dark:text-dk-brand" aria-hidden="true">⌕</span>
 				<span class="sr-only">Buscar objetos encontrados</span>
-				<input type="search" name="place" placeholder="Filtrar por lugar..." value={place || ""} />
-				<input type="date" name="date" value={date || ""} />
-				<button type="submit">Filtrar</button>
+				<input class="w-full border-0 bg-transparent text-[13px] text-[#526461] outline-none placeholder:text-[#a4b0ae] dark:text-dk-text dark:placeholder:text-[#6f857e]" type="search" name="place" placeholder="Filtrar por lugar..." value={place || ""} />
+				<input class="w-full border-0 bg-transparent text-[13px] text-[#526461] outline-none dark:text-dk-text" type="date" name="date" value={date || ""} />
+				<button class="cursor-pointer" type="submit">Filtrar</button>
 			</form>
 
-			<nav class="category-list" aria-label="Categorías de objetos">
-				<a class={!category ? "category active" : "category"} href="/encontrados">Todos</a>
-				<a class={category === "Mochilas y bolsos" ? "category active" : "category"} href="/encontrados?category=Mochilas+y+bolsos">Mochilas y bolsos</a>
-				<a class={category === "Tecnología" ? "category active" : "category"} href="/encontrados?category=Tecnología">Tecnología</a>
-				<a class={category === "Útiles" ? "category active" : "category"} href="/encontrados?category=Útiles">Útiles</a>
-				<a class={category === "Otros" ? "category active" : "category"} href="/encontrados?category=Otros">Otros</a>
+			<nav class="my-[18px] mb-5 flex gap-2 overflow-x-auto pb-[3px]" aria-label="Categorías de objetos">
+				<a class={!category ? "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e4f1e9] bg-[#eaf5ee] px-[13px] text-xs font-bold text-[#548d74] no-underline dark:border-[#2c4a3c] dark:bg-[#1c3329] dark:text-[#9ed3b8]" : "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e9efed] px-[13px] text-xs font-bold text-[#788784] no-underline dark:border-dk-border-strong dark:text-dk-muted"} href="/encontrados">Todos</a>
+				<a class={category === "Mochilas y bolsos" ? "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e4f1e9] bg-[#eaf5ee] px-[13px] text-xs font-bold text-[#548d74] no-underline dark:border-[#2c4a3c] dark:bg-[#1c3329] dark:text-[#9ed3b8]" : "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e9efed] px-[13px] text-xs font-bold text-[#788784] no-underline dark:border-dk-border-strong dark:text-dk-muted"} href="/encontrados?category=Mochilas+y+bolsos">Mochilas y bolsos</a>
+				<a class={category === "Tecnología" ? "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e4f1e9] bg-[#eaf5ee] px-[13px] text-xs font-bold text-[#548d74] no-underline dark:border-[#2c4a3c] dark:bg-[#1c3329] dark:text-[#9ed3b8]" : "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e9efed] px-[13px] text-xs font-bold text-[#788784] no-underline dark:border-dk-border-strong dark:text-dk-muted"} href="/encontrados?category=Tecnología">Tecnología</a>
+				<a class={category === "Útiles" ? "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e4f1e9] bg-[#eaf5ee] px-[13px] text-xs font-bold text-[#548d74] no-underline dark:border-[#2c4a3c] dark:bg-[#1c3329] dark:text-[#9ed3b8]" : "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e9efed] px-[13px] text-xs font-bold text-[#788784] no-underline dark:border-dk-border-strong dark:text-dk-muted"} href="/encontrados?category=Útiles">Útiles</a>
+				<a class={category === "Otros" ? "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e4f1e9] bg-[#eaf5ee] px-[13px] text-xs font-bold text-[#548d74] no-underline dark:border-[#2c4a3c] dark:bg-[#1c3329] dark:text-[#9ed3b8]" : "inline-flex min-h-[34px] items-center gap-[7px] whitespace-nowrap rounded-full border border-[#e9efed] px-[13px] text-xs font-bold text-[#788784] no-underline dark:border-dk-border-strong dark:text-dk-muted"} href="/encontrados?category=Otros">Otros</a>
 			</nav>
 
-			<div class="listing-grid">
+			<div class="grid grid-cols-3 gap-[18px] max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 max-[520px]:gap-[13px]">
 				{avisos && avisos.length > 0 ? (
 					avisos.map((aviso) => (
-						<article class="listing-card">
-							<div class="listing-card-art">
+						<article class="overflow-hidden rounded-[17px] border border-[#eaf0ee] bg-white shadow-[0_7px_22px_#304d4210] transition duration-200 hover:-translate-y-[3px] hover:shadow-[0_12px_25px_#304d4218] max-[520px]:grid max-[520px]:grid-cols-[118px_minmax(0,1fr)] dark:border-dk-border dark:bg-dk-surface dark:shadow-[0_7px_22px_#00000038] dark:hover:shadow-[0_12px_25px_#0000004d]">
+							<div class="relative grid h-[164px] place-items-center overflow-hidden bg-gradient-to-br from-[#eaf5ed] to-[#e8f3f5] max-[520px]:h-full max-[520px]:min-h-[138px] dark:bg-[linear-gradient(135deg,#16261f,#152428)]">
 								{aviso.imageurl ? (
-									<img src={aviso.imageurl} alt={aviso.title} />
+									<img class="size-full object-cover" src={aviso.imageurl} alt={aviso.title} loading="lazy" decoding="async" />
 								) : (
-									<span class="listing-card-emoji" aria-hidden="true">🔑</span>
+									<span class="text-[68px] drop-shadow-[0_8px_8px_#2d454426] max-[520px]:text-[51px]" aria-hidden="true">🔑</span>
 								)}
-								<span class="listing-card-tag">{aviso.category || "Objeto"}</span>
+								<span class="absolute bottom-[11px] left-3 rounded-[7px] bg-[#ffffffdf] px-[9px] py-[5px] text-[10px] font-extrabold text-[#668078] capitalize max-[520px]:right-[6px] max-[520px]:bottom-[7px] max-[520px]:left-[6px] max-[520px]:px-[5px] max-[520px]:py-1 max-[520px]:text-center max-[520px]:text-[9px] dark:bg-[#0f1815d9] dark:text-[#a9bdb6]">{aviso.category || "Objeto"}</span>
 							</div>
-							<div class="listing-card-body">
-								<h3>{aviso.title}</h3>
-								<p>{aviso.details}</p>
-								<div class="listing-card-meta">
-									<span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>{aviso.place}</span>
+							<div class="px-[15px] pt-[15px] pb-[13px] max-[520px]:px-3 max-[520px]:pt-[15px] max-[520px]:pb-3">
+								<h3 class="mb-1.5 text-[15px] font-extrabold text-[#344a47] max-[520px]:text-sm dark:text-[#e0ebe6]">{aviso.title}</h3>
+								<p class="mb-[13px] text-xs leading-[1.55] text-[#899592] max-[520px]:text-[11px] dark:text-dk-muted">{aviso.details}</p>
+								<p class="mb-[11px] text-[11px] leading-[1.4] text-[#98a39f] dark:text-dk-faint">Publicado por <strong class="font-extrabold text-[#647d75] dark:text-[#a9bdb6]">{aviso.author_name || "Miembro de la comunidad"}</strong></p>
+								<div class="flex justify-between gap-2 border-t border-[#f0f3f2] pt-2.5 text-[11px] text-[#98a39f] max-[520px]:text-[10px] dark:border-dk-border dark:text-dk-faint">
+									<span><span class="mr-[5px] text-[#6ea991] dark:text-dk-brand" aria-hidden="true">⌖</span>{aviso.place}</span>
 									<span>{aviso.created_at ? new Date(aviso.created_at).toLocaleDateString("es-AR") : ""}</span>
 								</div>
 							</div>
 						</article>
 					))
 				) : (
-					<p class="section-description">Todavía no hay objetos encontrados publicados.</p>
+					<p class="mb-0 text-sm text-[#748584] dark:text-dk-muted">Todavía no hay objetos encontrados publicados.</p>
 				)}
 			</div>
 		</section>
 
-		<aside class="page-callout">
-			<div class="page-callout-icon" aria-hidden="true">✦</div>
+		<aside class="mt-[42px] flex items-center gap-[15px] rounded-[17px] border border-[#e7f0eb] bg-[#f5faf7] px-6 py-[21px] max-[520px]:mt-[34px] max-[520px]:flex-wrap max-[520px]:items-start max-[520px]:p-[17px] dark:border-dk-border dark:bg-dk-bg-soft">
+			<div class="grid size-[42px] shrink-0 place-items-center rounded-[13px] bg-[#e2f1e7] text-[21px] text-[#68a487] dark:bg-[#1c2f27] dark:text-dk-brand" aria-hidden="true">✦</div>
 			<div>
-				<h2>¿Es algo que perdiste?</h2>
-				<p>Revisa los avisos o cuéntanos qué estás buscando.</p>
+				<h2 class="mb-1 text-sm font-extrabold text-[#3e5952] dark:text-dk-heading">¿Es algo que perdiste?</h2>
+				<p class="m-0 text-xs text-[#87958f] dark:text-dk-muted">Revisa los avisos o cuéntanos qué estás buscando.</p>
 			</div>
-			<a href="/perdidos">Ver objetos perdidos <span aria-hidden="true">→</span></a>
+			<a class="ml-auto text-xs font-extrabold whitespace-nowrap text-[#60957d] no-underline max-[520px]:ml-[57px] dark:text-dk-brand" href="/perdidos">Ver objetos perdidos <span aria-hidden="true">→</span></a>
 		</aside>
 
-		<footer class="page-footer">
-			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
+		<footer class="flex justify-between px-1 pt-6 text-[11px] text-[#9aa6a2] max-[520px]:flex-col max-[520px]:gap-[7px] dark:text-dk-faint">
+			<span>Renault Finder <span class="px-1 text-[#7fb7ca] dark:text-[#6f9fae]">·</span> Encuentra, comparte, sonríe</span>
 		</footer>
 	</main>
+	<ReportFoundModal />
 </Layout>

@@ -3,22 +3,22 @@ import ReportFoundForm from "./ReportFoundForm.jsx";
 ---
 
 <dialog
-	class="report-dialog"
+	class="m-auto h-fit max-h-[min(850px,calc(100dvh-32px))] w-[min(660px,calc(100%-32px))] max-w-none overflow-auto rounded-[22px] border border-[#e8f0ec] bg-white p-0 text-[#294342] shadow-[0_24px_80px_#243e3433] backdrop:bg-[#243d35a3] backdrop:backdrop-blur-[8px] dark:border-dk-border dark:bg-[#131d1a] dark:text-dk-text dark:shadow-[0_24px_80px_#000000a6] dark:backdrop:bg-[#050a08cc]"
 	id="report-found-dialog"
 	aria-labelledby="report-found-dialog-title"
 	aria-describedby="report-found-dialog-description"
 >
-	<div class="report-dialog-panel">
-		<div class="report-dialog-heading">
+	<div class="p-[26px] max-[520px]:p-5">
+		<div class="mb-[22px] flex items-start justify-between gap-4">
 			<div>
-				<p class="page-section-kicker">Un gesto puede ayudar mucho</p>
-				<h2 id="report-found-dialog-title">Reportar objeto encontrado</h2>
-				<p id="report-found-dialog-description">Cuéntanos qué encontraste y dónde. Así será más fácil que vuelva con su dueño.</p>
+				<p class="mb-[7px] text-[11px] font-extrabold tracking-[0.045em] text-[#5b9981] uppercase dark:text-dk-brand">Un gesto puede ayudar mucho</p>
+				<h2 class="mb-[6px] text-2xl font-extrabold tracking-[-0.035em] text-[#344a47] dark:text-dk-heading" id="report-found-dialog-title">Reportar objeto encontrado</h2>
+				<p class="mb-0 text-[13px] leading-[1.55] text-[#87958f] dark:text-dk-muted" id="report-found-dialog-description">Cuéntanos qué encontraste y dónde. Así será más fácil que vuelva con su dueño.</p>
 			</div>
-			<button class="report-dialog-close" type="button" data-close-report-found-dialog aria-label="Cerrar panel">×</button>
+			<button class="grid size-9 shrink-0 cursor-pointer place-items-center rounded-full border border-[#e8efeb] bg-[#f8fbf9] text-[25px] leading-none text-[#668078] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#80c4a0] dark:border-dk-border-strong dark:bg-[#1b2823] dark:text-[#a9bdb6]" type="button" data-close-report-found-dialog aria-label="Cerrar panel">×</button>
 		</div>
 
-		<ReportFoundForm client:load />
+		<ReportFoundForm client:visible />
 	</div>
 </dialog>
 

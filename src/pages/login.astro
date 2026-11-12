@@ -3,11 +3,11 @@ import Layout from "../layouts/Layout.astro";
 import AuthForm from "../components/AuthForm.jsx";
 ---
 <Layout title="Iniciar sesión | Renault Finder">
-  <main class="design-page">
-    <section class="page-hero">
-      <div class="page-hero-copy">
-        <h1>Iniciar sesión</h1>
-        <p>Accedé con tu mail institucional @alumnos.itr.edu.ar</p>
+  <main class="mx-auto w-[min(1120px,calc(100%-48px))] px-0 py-[34px] pb-[30px] text-left font-nunito text-[#294342] max-[760px]:w-[min(560px,calc(100%-32px))] max-[760px]:pt-[22px] dark:text-dk-text">
+    <section class="relative flex min-h-[315px] items-center justify-between gap-[30px] overflow-hidden rounded-[30px] border border-[#e8f1ed] bg-[linear-gradient(112deg,#f3fbf6_0%,#f5fbfd_100%)] px-[8%] py-[42px] max-[760px]:min-h-[300px] max-[760px]:px-7 max-[760px]:py-[34px] max-[520px]:min-h-[315px] max-[520px]:rounded-[23px] max-[520px]:px-[21px] max-[520px]:py-[29px] dark:border-dk-border dark:bg-dk-bg-soft dark:bg-[linear-gradient(112deg,#131f1b_0%,#121d20_100%)]">
+      <div class="relative z-[1] max-w-[430px] max-[760px]:max-w-[430px]">
+        <h1 class="mb-1 text-left text-[1.6rem] font-extrabold tracking-[-0.035em] text-[#294342] dark:text-dk-heading">Iniciar sesión</h1>
+        <p class="mb-5 text-left text-[0.95rem] text-[#666] dark:text-dk-muted">Accedé con tu mail institucional @alumnos.itr.edu.ar</p>
         <AuthForm client:load />
       </div>
     </section>

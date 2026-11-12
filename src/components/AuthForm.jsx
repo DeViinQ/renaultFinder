@@ -30,6 +30,7 @@ export default function AuthForm() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            className="my-[5px] w-full rounded-lg border border-[#d9d5cc] bg-white px-3 py-[9px] text-base text-[#333] focus:border-[#6ea991] focus:outline-none dark:border-dk-border-strong dark:bg-[#101a17] dark:text-dk-text dark:focus:border-dk-brand dark:focus:shadow-[0_0_0_3px_#8ed0b029]"
           />
           <br />
           <input
@@ -37,16 +38,25 @@ export default function AuthForm() {
             placeholder="Contraseña"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="my-[5px] w-full rounded-lg border border-[#d9d5cc] bg-white px-3 py-[9px] text-base text-[#333] focus:border-[#6ea991] focus:outline-none dark:border-dk-border-strong dark:bg-[#101a17] dark:text-dk-text dark:focus:border-dk-brand dark:focus:shadow-[0_0_0_3px_#8ed0b029]"
           />
           <br />
-          <button onClick={entrar}>Iniciar sesión</button>
+          <button
+            onClick={entrar}
+            className="my-[5px] w-full cursor-pointer rounded-lg border-0 bg-[#5f9a82] p-[9px] font-semibold text-white hover:bg-[#4f8570] dark:bg-dk-brand-strong dark:hover:bg-[#4b8f74]"
+          >
+            Iniciar sesión
+          </button>
         </>
       )}
       <br />
-      <button onClick={() => setIsSignup(!isSignup)}>
+      <button
+        onClick={() => setIsSignup(!isSignup)}
+        className="my-[5px] w-full cursor-pointer rounded-lg border border-[#5f9a82] bg-transparent p-[9px] font-semibold text-[#5f9a82] hover:bg-[#eaf3ef] dark:border-dk-brand dark:bg-transparent dark:text-dk-brand dark:hover:bg-[#1c2f27]"
+      >
         {isSignup ? "Ya tengo cuenta" : "Registrarse"}
       </button>
-      {mensaje && <p>{mensaje}</p>}
+      {mensaje && <p className="mt-2 text-sm text-[#b42318] dark:text-[#ff9b8f]">{mensaje}</p>}
     </div>
   );
 }

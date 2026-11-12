@@ -2,54 +2,114 @@
 import Layout from "../layouts/Layout.astro";
 ---
 <Layout title="Mis avisos | Renault Finder">
-	<main class="design-page">
-		<section class="page-hero">
-			<div class="page-hero-copy">
-				<h1>Mis avisos</h1>
-				<p>Todos los objetos que reportaste como perdidos o encontrados.</p>
+	<main class="mx-auto w-[min(1120px,calc(100%-48px))] px-0 py-[34px] pb-[30px] text-left font-nunito text-[#294342] max-[760px]:w-[min(560px,calc(100%-32px))] max-[760px]:pt-[22px] dark:text-dk-text">
+		<section class="relative flex items-center justify-between gap-[10px] overflow-hidden rounded-[30px] border border-[#e8f1ed] bg-[linear-gradient(112deg,#f3fbf6_0%,#f5fbfd_100%)] px-[8%] py-[22px] max-[760px]:min-h-[300px] max-[760px]:px-7 max-[760px]:py-[34px] max-[520px]:min-h-[315px] max-[520px]:rounded-[23px] max-[520px]:px-[21px] max-[520px]:py-[29px] dark:border-dk-border dark:bg-dk-bg-soft dark:bg-[linear-gradient(112deg,#131f1b_0%,#121d20_100%)]">
+			<div class="relative z-[1]">
+				<h1 class="mb-[13px] text-[clamp(36px,4.4vw,54px)] leading-[1.08] font-extrabold tracking-[-0.045em] text-[#294342] max-[520px]:text-[37px] dark:text-dk-heading">Mis avisos</h1>
+				<p class="mb-[23px] max-w-[490px] text-[15px] leading-[1.7] text-[#708482] max-[520px]:max-w-[305px] max-[520px]:text-sm dark:text-dk-muted">Todos los objetos que reportaste como perdidos o encontrados.</p>
 			</div>
 		</section>
 
-		<section class="page-section" aria-labelledby="mis-avisos-title">
-			<div class="page-section-heading">
+		<section class="px-2 py-[47px] pb-0 max-[760px]:px-0 max-[760px]:pt-10" aria-labelledby="mis-avisos-title">
+			<div class="mb-[21px] flex items-end justify-between gap-6 max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-2">
 				<div>
-					<p class="page-section-kicker">Tu actividad</p>
-					<h2 id="mis-avisos-title">Objetos que reportaste</h2>
+					<p class="mb-2 text-[11px] font-extrabold tracking-[0.045em] text-[#5b9981] uppercase dark:text-dk-brand">Tu actividad</p>
+					<h2 class="mb-[7px] text-[clamp(22px,2.4vw,28px)] font-extrabold tracking-[-0.035em] text-[#2d4341] dark:text-dk-heading" id="mis-avisos-title">Objetos que reportaste</h2>
 				</div>
 			</div>
-			<div class="listing-grid" id="mis-avisos-grid">
-				<p class="section-description" id="mis-avisos-loading">Cargando tus avisos...</p>
+			<div class="grid grid-cols-3 gap-[18px] max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 max-[520px]:gap-[13px]" id="mis-avisos-grid">
+				<p class="mb-0 text-sm text-[#748584] dark:text-dk-muted" id="mis-avisos-loading">Cargando tus avisos...</p>
 			</div>
 		</section>
 	</main>
 	<script>
 		import { supabase } from "../db/supabase";
 		const grid = document.getElementById("mis-avisos-grid");
+
+		const escapeHtml = (value) =>
+			String(value ?? "").replace(/[&<>"']/g, (char) => ({
+				"&": "&amp;",
+				"<": "&lt;",
+				">": "&gt;",
+				'"': "&quot;",
+				"'": "&#39;",
+			}[char]));
+
+		const cardClass = "overflow-hidden rounded-[17px] border border-[#eaf0ee] bg-white shadow-[0_7px_22px_#304d4210] transition duration-200 hover:-translate-y-[3px] hover:shadow-[0_12px_25px_#304d4218] max-[520px]:grid max-[520px]:grid-cols-[118px_minmax(0,1fr)] dark:border-dk-border dark:bg-dk-surface dark:shadow-[0_7px_22px_#00000038] dark:hover:shadow-[0_12px_25px_#0000004d]";
+		const artClass = "relative grid h-[164px] place-items-center overflow-hidden bg-gradient-to-br from-[#eaf5ed] to-[#e8f3f5] max-[520px]:h-full max-[520px]:min-h-[138px] dark:bg-[linear-gradient(135deg,#16261f,#152428)]";
+		const tagClass = "absolute bottom-[11px] left-3 rounded-[7px] bg-[#ffffffdf] px-[9px] py-[5px] text-[10px] font-extrabold text-[#668078] capitalize max-[520px]:right-[6px] max-[520px]:bottom-[7px] max-[520px]:left-[6px] max-[520px]:px-[5px] max-[520px]:py-1 max-[520px]:text-center max-[520px]:text-[9px] dark:bg-[#0f1815d9] dark:text-[#a9bdb6]";
+		const bodyClass = "px-[15px] pt-[15px] pb-[13px] max-[520px]:px-3 max-[520px]:pt-[15px] max-[520px]:pb-3";
+		const emptyClass = "mb-0 text-sm text-[#748584] dark:text-dk-muted";
+
+		// Elimina un aviso propio. La API valida la sesión y la autoría.
+		window.deleteAviso = async (id) => {
+			if (!window.confirm("¿Eliminar este aviso? No se puede deshacer.")) return;
+
+			const {
+				data: { session },
+			} = await supabase.auth.getSession();
+
+			if (!session) {
+				window.location.href = "/login";
+				return;
+			}
+
+			const res = await fetch(`/api/avisos/${id}`, {
+				method: "DELETE",
+				headers: { Authorization: `Bearer ${session.access_token}` },
+			});
+
+			if (!res.ok) {
+				const info = await res.json().catch(() => ({}));
+				window.alert(info.error || "No se pudo eliminar el aviso.");
+				return;
+			}
+
+			// Sacamos la tarjeta de la pantalla sin recargar la página.
+			document.querySelector(`[data-delete-notice="${id}"]`)?.closest("article")?.remove();
+
+			if (grid && !grid.querySelector("article")) {
+				grid.innerHTML = `<p class="${emptyClass}">Todavía no publicaste avisos.</p>`;
+			}
+		};
+
 		supabase.auth.getSession().then(async ({ data }) => {
 			if (!data.session) { window.location.href = "/login"; return; }
+			const user = data.session.user;
+			const metadata = user.user_metadata || {};
+			const displayName =
+				metadata.display_name ||
+				metadata.name ||
+				(user.email || "").split("@")[0] ||
+				"Miembro de la comunidad";
+
 			const { data: avisos } = await supabase
 				.from("avisos")
 				.select("*")
-				.eq("user_id", data.session.user.id)
+				.eq("user_id", user.id)
 				.order("created_at", { ascending: false });
 			if (!grid) return;
 			if (!avisos || avisos.length === 0) {
-				grid.innerHTML = '<p class="section-description">Todavía no publicaste avisos.</p>';
+				grid.innerHTML = `<p class="${emptyClass}">Todavía no publicaste avisos.</p>`;
 				return;
 			}
 			grid.innerHTML = avisos.map((a) => `
-				<article class="listing-card">
-					<div class="listing-card-art">
-						${a.imageurl ? `<img src="${a.imageurl}" alt="${a.title}" />` : '<span class="listing-card-emoji" aria-hidden="true">🎒</span>'}
-						<span class="listing-card-tag">${a.type}</span>
+				<article class="${cardClass}">
+					<div class="${artClass}">
+						${a.imageurl ? `<img class="size-full object-cover" src="${escapeHtml(a.imageurl)}" alt="${escapeHtml(a.title)}" loading="lazy" decoding="async" />` : '<span class="text-[68px] drop-shadow-[0_8px_8px_#2d454426] max-[520px]:text-[51px]" aria-hidden="true">🎒</span>'}
+						<span class="${tagClass}">${escapeHtml(a.type)}</span>
 					</div>
-					<div class="listing-card-body">
-						<h3>${a.title}</h3>
-						<p>${a.details}</p>
-						<div class="listing-card-meta">
-							<span><span class="mr-[5px] text-[#6ea991]" aria-hidden="true">⌖</span>${a.place}</span>
+					<div class="${bodyClass}">
+						<h3 class="mb-1.5 text-[15px] font-extrabold text-[#344a47] max-[520px]:text-sm dark:text-[#e0ebe6]">${escapeHtml(a.title)}</h3>
+						<p class="mb-[13px] text-xs leading-[1.55] text-[#899592] max-[520px]:text-[11px] dark:text-dk-muted">${escapeHtml(a.details)}</p>
+						<p class="mb-[11px] text-[11px] leading-[1.4] text-[#98a39f] dark:text-dk-faint">Publicado por <strong class="font-extrabold text-[#647d75] dark:text-[#a9bdb6]">${escapeHtml(a.author_name || displayName)}</strong></p>
+						<div class="flex justify-between gap-2 border-t border-[#f0f3f2] pt-2.5 text-[11px] text-[#98a39f] max-[520px]:text-[10px] dark:border-dk-border dark:text-dk-faint">
+							<span><span class="mr-[5px] text-[#6ea991] dark:text-dk-brand" aria-hidden="true">⌖</span>${escapeHtml(a.place)}</span>
 							<span>${a.created_at ? new Date(a.created_at).toLocaleDateString("es-AR") : ""}</span>
 						</div>
+						<button type="button" onclick="deleteAviso('${a.id}')" class="mt-4 cursor-pointer rounded bg-red-400 px-4 py-2 text-sm text-white transition-all duration-300 hover:bg-red-500" data-delete-notice="${a.id}">
+							Eliminar aviso
+						</button>
 					</div>
 				</article>
 			`).join("");

@@ -1,9 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Posts from "../components/Posts.astro";
+import ReportLostModal from "../components/ReportLostModal.astro";
 import { supabase } from "../db/supabase";
 
-const { data, error } = await supabase.from("todos").select("*");
+// Una sola consulta: la tabla "todos" no existe en el proyecto y hacía
+// perder tiempo en cada carga del inicio.
+const { data: avisos, error } = await supabase
+	.from("avisos")
+	.select("*")
+	.order("created_at", { ascending: false });
 
 if (error) {
 	console.error(error);
@@ -11,81 +17,69 @@ if (error) {
 ---
 
 <Layout title="Renault Finder | Encuentra, comparte, sonríe">
-	<main class="design-page">
-		<section class="page-hero">
-			<div class="page-hero-copy">
-				<p class="page-kicker"><span class="size-2 rounded-full bg-[#80c4a0]"></span>La comunidad que te ayuda a encontrar</p>
-				<h1>Lo que perdiste<br /><span>puede volver a ti.</span></h1>
-				<p>
+	<main class="mx-auto w-[min(1120px,calc(100%-48px))] px-0 py-[34px] pb-[30px] text-left font-nunito text-[#294342] max-[760px]:w-[min(560px,calc(100%-32px))] max-[760px]:pt-[22px] dark:text-dk-text">
+		<section class="relative flex min-h-[315px] items-center justify-between gap-[30px] overflow-hidden rounded-[30px] border border-[#e8f1ed] bg-[linear-gradient(112deg,#f3fbf6_0%,#f5fbfd_100%)] px-[8%] py-[42px] max-[760px]:min-h-[300px] max-[760px]:px-7 max-[760px]:py-[34px] max-[520px]:min-h-[315px] max-[520px]:rounded-[23px] max-[520px]:px-[21px] max-[520px]:py-[29px] dark:border-dk-border dark:bg-dk-bg-soft dark:bg-[linear-gradient(112deg,#131f1b_0%,#121d20_100%)]">
+			<div class="relative z-[1] max-w-[610px] max-[760px]:max-w-[460px]">
+				<p class="mb-[15px] flex items-center gap-[9px] text-[12px] font-extrabold tracking-[0.045em] text-[#5b9981] dark:text-dk-brand"><span class="size-2 rounded-full bg-[#80c4a0]"></span>La comunidad que te ayuda a encontrar</p>
+				<h1 class="mb-[13px] text-[clamp(36px,4.4vw,54px)] leading-[1.08] font-extrabold tracking-[-0.045em] text-[#294342] max-[520px]:text-[37px] dark:text-dk-heading">Lo que perdiste<br /><span class="text-[#67a98e] dark:text-dk-brand">puede volver a ti.</span></h1>
+				<p class="mb-[23px] max-w-[490px] text-[15px] leading-[1.7] text-[#708482] max-[520px]:max-w-[305px] max-[520px]:text-sm dark:text-dk-muted">
 					Conectamos a quienes perdieron algo con quienes lo encontraron. Busca, comparte y recupera tus cosas en tu zona.
 				</p>
-				<form method="get" action="/busqueda" class="page-search">
-					<span class="page-search-icon" aria-hidden="true">⌕</span>
+				<form method="get" action="/busqueda" class="flex h-[50px] w-[min(540px,100%)] items-center gap-[11px] rounded-[14px] border border-[#e4eeea] bg-white px-[14px] shadow-[0_7px_20px_#3a69500c] dark:border-dk-border-strong dark:bg-dk-surface">
+					<span class="text-[21px] text-[#75a997] dark:text-dk-brand" aria-hidden="true">⌕</span>
 					<span class="sr-only">Buscar objetos</span>
-					<input class="border" type="search" name="q" placeholder="¿Qué objeto estás buscando?" />
+					<input class="w-full border-0 bg-transparent text-[13px] text-[#526461] outline-none placeholder:text-[#a4b0ae] dark:text-dk-text dark:placeholder:text-[#6f857e]" type="search" name="q" placeholder="¿Qué objeto estás buscando?" />
 				</form>
-				<div class="hero-actions">
-					<a class="hero-text-link" href="/busqueda">Ir a búsqueda <span aria-hidden="true">→</span></a>
-					<button class="page-button" type="button" data-open-report-dialog>
-						＋ Reportar objeto perdido
+				<div class="flex flex-wrap items-center gap-[18px] max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-[13px] mt-4">
+					<a class="mt-0 inline-flex items-center gap-[5px] text-xs font-extrabold text-[#60957d] no-underline dark:text-dk-brand" href="/busqueda">Ir a búsqueda <span aria-hidden="true">→</span></a>
+					<button class="inline-flex min-h-11 cursor-pointer items-center justify-center gap-[9px] rounded-[13px] border border-transparent bg-[#65a98b] px-[17px] text-[13px] font-extrabold text-white no-underline shadow-[0_7px_16px_#65a98b30] transition duration-150 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_#65a98b38] dark:bg-dk-brand-strong dark:shadow-[0_7px_16px_#00000045] dark:hover:shadow-[0_10px_20px_#00000052]" type="button" data-open-report-dialog>
+						Reportar objeto perdido
 					</button>
 				</div>
 			</div>
 		</section>
 
-		<section class="page-section" aria-labelledby="shortcuts-title">
-			<div class="page-section-heading">
+		<section class="px-2 py-[47px] pb-0 max-[760px]:px-0 max-[760px]:pt-10" aria-labelledby="shortcuts-title">
+			<div class="mb-[21px] flex items-end justify-between gap-6 max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-2">
 				<div>
-					<p class="page-section-kicker">¿Cómo podemos ayudarte?</p>
-					<h2 id="shortcuts-title">Un buen lugar para empezar</h2>
+					<p class="mb-2 text-[11px] font-extrabold tracking-[0.045em] text-[#5b9981] uppercase dark:text-dk-brand">¿Cómo podemos ayudarte?</p>
+					<h2 class="mb-[7px] text-[clamp(22px,2.4vw,28px)] font-extrabold tracking-[-0.035em] text-[#2d4341] dark:text-dk-heading" id="shortcuts-title">Un buen lugar para empezar</h2>
 				</div>
 			</div>
-			<div class="shortcut-grid">
-				<a class="shortcut-card" href="/perdidos">
-					<span class="shortcut-icon" aria-hidden="true">⌕</span>
+			<div class="grid grid-cols-3 gap-[18px] max-[760px]:grid-cols-1">
+				<a class="flex min-h-[126px] items-center gap-4 rounded-[18px] border border-[#e8f0ec] bg-white p-5 text-inherit no-underline shadow-[0_6px_20px_#304d420c] transition duration-150 hover:-translate-y-[3px] hover:shadow-[0_10px_24px_#304d4215] dark:border-dk-border dark:bg-dk-surface dark:shadow-[0_7px_22px_#00000038] dark:hover:shadow-[0_12px_25px_#0000004d]" href="/perdidos">
+					<span class="grid size-[52px] shrink-0 place-items-center rounded-2xl bg-[#e9f5ed] text-[26px] text-[#639c80] dark:bg-[#1c2f27] dark:text-dk-brand" aria-hidden="true">⌕</span>
 					<span>
-						<h3>Perdí un objeto</h3>
-						<p>Explora los avisos y encuentra algo que se parezca.</p>
+						<h3 class="mb-[5px] text-[15px] font-extrabold text-[#38514b] dark:text-dk-heading">Perdí un objeto</h3>
+						<p class="m-0 text-xs leading-[1.5] text-[#84928d] dark:text-dk-muted">Explora los avisos y encuentra algo que se parezca.</p>
 					</span>
-					<span class="shortcut-arrow" aria-hidden="true">→</span>
+					<span class="ml-auto text-xl text-[#78aa94] dark:text-dk-brand" aria-hidden="true">→</span>
 				</a>
-				<a class="shortcut-card" href="/encontrados">
-					<span class="shortcut-icon" aria-hidden="true">♡</span>
+				<a class="flex min-h-[126px] items-center gap-4 rounded-[18px] border border-[#e8f0ec] bg-white p-5 text-inherit no-underline shadow-[0_6px_20px_#304d420c] transition duration-150 hover:-translate-y-[3px] hover:shadow-[0_10px_24px_#304d4215] dark:border-dk-border dark:bg-dk-surface dark:shadow-[0_7px_22px_#00000038] dark:hover:shadow-[0_12px_25px_#0000004d]" href="/encontrados">
+					<span class="grid size-[52px] shrink-0 place-items-center rounded-2xl bg-[#e8f4f7]  text-[26px] text-[#70a9bd] dark:bg-[#18282d] dark:text-[#7fc0d6]" aria-hidden="true">♡</span>
 					<span>
-						<h3>Encontré un objeto</h3>
-						<p>Comparte el hallazgo para ayudar a su dueño.</p>
+						<h3 class="mb-[5px] text-[15px] font-extrabold text-[#38514b] dark:text-dk-heading">Encontré un objeto</h3>
+						<p class="m-0 text-xs leading-[1.5] text-[#84928d] dark:text-dk-muted">Comparte el hallazgo para ayudar a su dueño.</p>
 					</span>
-					<span class="shortcut-arrow" aria-hidden="true">→</span>
+					<span class="ml-auto text-xl text-[#78aa94] dark:text-dk-brand" aria-hidden="true">→</span>
 				</a>
 			</div>
 		</section>
 
-		<section class="page-section" aria-labelledby="recent-title">
-			<div class="page-section-heading">
+		<section class="px-2 py-[47px] pb-0 max-[760px]:px-0 max-[760px]:pt-10" aria-labelledby="recent-title">
+			<div class="mb-[21px] flex items-end justify-between gap-6 max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-2">
 				<div>
-					<p class="page-section-kicker">Avisos de la comunidad</p>
-					<h2 id="recent-title">Novedades recientes</h2>
-					<p>Un objeto puede estar más cerca de lo que piensas.</p>
+					<p class="mb-2 text-[11px] font-extrabold tracking-[0.045em] text-[#5b9981] uppercase dark:text-dk-brand">Avisos de la comunidad</p>
+					<h2 class="mb-[7px] text-[clamp(22px,2.4vw,28px)] font-extrabold tracking-[-0.035em] text-[#2d4341] dark:text-dk-heading" id="recent-title">Novedades recientes</h2>
+					<p class="mb-0 text-sm text-[#748584] dark:text-dk-muted">Un objeto puede estar más cerca de lo que piensas.</p>
 				</div>
 			</div>
-			<div class="listing-grid">
-				<Posts />
+			<div class="grid grid-cols-3 gap-[18px] max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 max-[520px]:gap-[13px]">
+				<Posts avisos={avisos ?? []} />
 			</div>
 		</section>
 
-		{data && data.length > 0 && (
-			<section class="community-strip" aria-label="Actividad de la comunidad">
-				<span class="community-strip-icon" aria-hidden="true">✿</span>
-				<span>La comunidad sigue compartiendo.</span>
-				<div class="community-names">
-					{data.map((entry) => <span class="community-chip">{entry.name}</span>)}
-				</div>
-			</section>
-		)}
 
-		<footer class="page-footer">
-			<span>Hecho con <span class="page-footer-heart" aria-label="cariño">♥</span> para nuestra comunidad</span>
-			<span>Renault Finder <span class="footer-separator">·</span> Encuentra, comparte, sonríe</span>
-		</footer>
 	</main>
+	<ReportLostModal />
 </Layout>
