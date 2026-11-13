@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import react from '@astrojs/react';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -10,7 +10,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   integrations: [react()],
   output: "server",
-  adapter: node({ mode: "standalone" }),
+  adapter: vercel({ mode: "standalone" }),
 
   // Al pasar el mouse por un link, la página se precarga y la navegación
   // se siente instantánea.
